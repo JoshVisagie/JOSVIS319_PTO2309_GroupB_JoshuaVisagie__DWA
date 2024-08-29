@@ -14,6 +14,7 @@ import {
   PageContent,
   PageHeader,
   Text,
+  Carousel,
   ResponsiveContext,
 } from "grommet";
 
@@ -22,7 +23,8 @@ import { Moon, Sun } from "grommet-icons";
 import "./App.css";
 import theme from "./theme.tsx";
 import React, { useContext, useState } from "react";
-
+import GuideBar from "./components/GuideBar.tsx";
+import RecomendedCarosell from "./components/RecomendedCarosell.tsx";
 const AppBar = (props) => (
   <Header
     background='brand'
@@ -58,9 +60,8 @@ function App() {
   return (
     <Grommet theme={theme} full themeMode={dark ? "dark" : "light"}>
       <Page>
-        <AppBar>
-          <Text size='large'>My App</Text>
-        </AppBar>
+        <RecomendedCarosell/>
+        <GuideBar/>
         <Button
           a11yTitle={dark ? "Switch to Light Mode" : "Switch to Dark Mode"}
           icon={dark ? <Moon /> : <Sun />}
@@ -77,6 +78,7 @@ function App() {
             ),
           }}
         />
+   
         <Grid columns="medium"  gap="large" pad={{bottom:"large"}}>
           <CardTemplate title={"Card 1"} />
           <CardTemplate title={"Card 2"} />
