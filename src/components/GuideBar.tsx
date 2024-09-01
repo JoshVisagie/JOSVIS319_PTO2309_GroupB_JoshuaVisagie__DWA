@@ -4,16 +4,30 @@ import Button from '@mui/joy/Button';
 import HomeIcon from '@mui/icons-material/Home';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import SettingsIcon from '@mui/icons-material/Settings';
+import TextField from '@mui/material/TextField';
 
 
 interface Props{
-  title:string;
+  title:string|JSX.Element;
   icon: JSX.Element;
 }
 
+const Search = ()=>{
+
+  return(
+    <div>
+        <TextField id="outlined-search" label="Search field" type="search" 
+        sx={{
+          bgcolor:"#00AEFF",
+          
+        }}
+        />
+     </div>
+      )
+}
 
 
-const NavButton : React.FC<Props> = (props) => {
+const GuideButton : React.FC<Props> = (props) => {
   const [hover, setHover] = useState(false);
 
   const handleOver = () => {
@@ -23,10 +37,15 @@ const NavButton : React.FC<Props> = (props) => {
     setHover(false);
   };
   return (
-    <Button  
+    <Button  className="guide--button"
     onMouseOver={handleOver} 
     onMouseOut={handleOut} 
-    
+    sx={{
+      bgcolor:"#00AEFF",
+      margin:"10px",
+      fontSize :'3 Rem',
+      width : hover ? '100px':'10px'
+    }}
     >
       {hover?props.title:props.icon}
     </Button>
@@ -35,12 +54,14 @@ const NavButton : React.FC<Props> = (props) => {
 
 const GuideBar = () => {
   return (
-    <div>
-      <Button></Button>
-      <NavButton title="Home" icon ={<HomeIcon/>}/>
-      <NavButton title="explore" icon = {<RocketLaunchIcon/>}/>
-      <NavButton title="settings" icon={<SettingsIcon/>}/>
+    <div className="guideBar">
       
+      <GuideButton title="Home" icon ={<HomeIcon/>}/>
+      <GuideButton title="favorites" icon = {<RocketLaunchIcon/>}/>
+      <GuideButton title={<Search/>} icon={<SettingsIcon/>}/>
+      <GuideButton title="user" icon={<SettingsIcon/>}/>
+      <GuideButton title="settings" icon={<SettingsIcon/>}/>
+     
     </div>
   );
 };
