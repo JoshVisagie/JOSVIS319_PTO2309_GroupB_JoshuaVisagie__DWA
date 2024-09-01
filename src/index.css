@@ -2,3 +2,14 @@
 padding: 0;
 margin: 0;
 }
+
+.accordian--singlePod{
+  padding: 10px;
+  margin: 10px;
+  background-color: aqua;
+  border-radius:55px;
+}
+.accordian--singlePod--summary{
+  background-color: blue;
+  border-radius:55px;
+}

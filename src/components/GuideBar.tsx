@@ -1,8 +1,19 @@
-import { Box, Button } from "grommet";
-import { HomeRounded, Deploy } from "grommet-icons";
-import { useState } from "react";
 
-const NavButton = (props) => {
+import { useState } from "react";
+import Button from '@mui/joy/Button';
+import HomeIcon from '@mui/icons-material/Home';
+import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
+import SettingsIcon from '@mui/icons-material/Settings';
+
+
+interface Props{
+  title:string;
+  icon: JSX.Element;
+}
+
+
+
+const NavButton : React.FC<Props> = (props) => {
   const [hover, setHover] = useState(false);
 
   const handleOver = () => {
@@ -12,24 +23,25 @@ const NavButton = (props) => {
     setHover(false);
   };
   return (
-    <Button primary 
-    label={hover && props.title} 
-    icon={!hover && props.icon}
+    <Button  
     onMouseOver={handleOver} 
     onMouseOut={handleOut} 
     
-    />
-  );
+    >
+      {hover?props.title:props.icon}
+    </Button>
+  ); 
 };
 
 const GuideBar = () => {
   return (
-    <Box align='center' direction='row' justify='center' >
-      <NavButton title="Home" icon = {<HomeRounded/>}/>
-      <NavButton title="explore" icon = {<Deploy/>}/>
-      <NavButton title="Home" icon = {<HomeRounded/>}/>
+    <div>
+      <Button></Button>
+      <NavButton title="Home" icon ={<HomeIcon/>}/>
+      <NavButton title="explore" icon = {<RocketLaunchIcon/>}/>
+      <NavButton title="settings" icon={<SettingsIcon/>}/>
       
-    </Box>
+    </div>
   );
 };
 
