@@ -42,9 +42,9 @@ const GuideButton : React.FC<Props> = (props) => {
     onMouseOut={handleOut} 
     sx={{
       bgcolor:"#00AEFF",
-      margin:"10px",
+      margin:"2px",
       fontSize :'3 Rem',
-      width : hover ? '100px':'10px'
+      width : hover ? '150px':'10px'
     }}
     >
       {hover?props.title:props.icon}

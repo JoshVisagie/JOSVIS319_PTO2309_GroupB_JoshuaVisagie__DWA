@@ -61,6 +61,16 @@ const Podcasts : React.FC= () => {
   const dispatch = useAppDispatch();
   const data = useAppSelector((state) => state);
 
+  interface Podcast{
+            title:string
+            id:string
+            genres: [number]
+            seasons:number
+            image:string
+            updated:string
+            description:string
+  }
+
   useEffect(() => {
     dispatch(fetchPodcasts());
   }, []);
@@ -69,7 +79,7 @@ const Podcasts : React.FC= () => {
   return (
     <div>
       {data.podcasts.isLoading && <p>loading</p>}
-      {data.podcasts.data.map((podcast) => {
+      {data.podcasts.data.map((podcast:Podcast) => {
         return (
           <SinglePod
             key={podcast.id}

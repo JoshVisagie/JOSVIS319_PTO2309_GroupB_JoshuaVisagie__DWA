@@ -9,14 +9,14 @@ import Typography from '@mui/material/Typography';
 
 const CarouselCard = () =>{
     return(
-        <Card>
-            <Card >
+        
+        <Card sx={{display:"flex"}}>
       <CardMedia
-        sx={{ height: 140 }}
+        sx={{ width:"50%"}}
         image="https://www.billboard.com/wp-content/uploads/media/tyler-the-creator-igor-album-art-2019-billboard-embed.jpg?w=600"
         title="green iguana"
       />
-      <CardContent>
+      <CardContent sx={{width:"50%"}}>
         <Typography gutterBottom variant="h5" component="div">
           Lizard
         </Typography>
@@ -30,7 +30,7 @@ const CarouselCard = () =>{
         <Button size="small">Learn More</Button>
       </CardActions>
     </Card>
-        </Card>
+        
 
 )
 }

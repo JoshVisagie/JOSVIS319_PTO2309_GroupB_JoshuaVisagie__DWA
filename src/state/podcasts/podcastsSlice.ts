@@ -8,22 +8,24 @@ export const fetchPodcasts= createAsyncThunk("fetchPodcasts", async()=>{
 const podcastsSlice = createSlice({
     name: 'podcasts',
     initialState: {
-      isLoading: false,
-      data: [],
-      error: false,
+        isLoading: false,
+        data: [],
+        error: false,
     },
 
     extraReducers: (builder) => {
-      builder.addCase(fetchPodcasts.pending, (state) => {
-        state.isLoading = true;
-      });
-      builder.addCase(fetchPodcasts.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.data = action.payload;
-      });
-      builder.addCase(fetchPodcasts.rejected, (state) => {
-        state.error = true;
-      });
+        builder.addCase(fetchPodcasts.pending, (state) => {
+            state.isLoading = true;
+        });
+        builder.addCase(fetchPodcasts.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.data = action.payload;
+        });
+        builder.addCase(fetchPodcasts.rejected, (state) => {
+            state.error = true;
+        });
     },
-  });
+    reducers: {}
+});
+  
 export default podcastsSlice.reducer;
