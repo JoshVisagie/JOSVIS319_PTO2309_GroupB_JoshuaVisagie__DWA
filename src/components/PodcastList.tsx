@@ -1,29 +1,24 @@
-//react imports
+// react imports
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../reduxHooks";
 
-//redux imports
+// redux imports
 import { fetchPodcasts } from "../state/podcasts/podcastsSlice";
-import { fetchIndivdualPodcast } from "../state/podcasts/individualPodcastSlice";
 
-//mui imports
+// mui imports
 import Accordion from "@mui/material/Accordion";
 import AccordionActions from "@mui/material/AccordionActions";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Button from "@mui/material/Button";
-import Tabs from "@mui/joy/Tabs";
-import TabList from "@mui/joy/TabList";
-import Tab from "@mui/joy/Tab";
-import { TabPanel } from "@mui/joy";
 
-//TS Interfaces
+// PodInfo component import
+import PodInfo from "./PodInfo";
 
-interface PodInfoProps {
-  id: string;
-}
-// Interface representing a podcast
+/** 
+ * Interface representing a podcast 
+ */
 interface Podcast {
   id: string; // Unique identifier for the podcast
   title: string; // Title of the podcast
@@ -33,25 +28,10 @@ interface Podcast {
   updated: string; // Date when the podcast was last updated
   description: string; // Description of the podcast
 }
-// Interface representing a single episode
-interface Episode {
-  id: string; // Unique identifier for the episode
-  title: string; // Title of the episode
-}
 
-// Interface representing a single season
-interface Season {
-  season: number; // Season number
-  episodes: Episode[]; // List of episodes in the season
-}
-
-// Interface for the individual podcast data
-interface PodcastData {
-  description: string; // Description of the podcast
-  seasons: Season[]; // Array of seasons with episodes
-}
-
-// Define the props interface for the SinglePod component
+/** 
+ * Define the props interface for the SinglePod component
+ */
 interface SinglePodProps {
   podcastTitle: string;           // Title of the podcast
   podcastID: string;              // Unique identifier for the podcast
@@ -64,85 +44,10 @@ interface SinglePodProps {
   handleChange: (id: string) => void; // Function to handle accordion expand/collapse
 }
 
-
- /**  PodInfo component handles displaying detailed information for an individual podcast,
- including its description and a list of episodes grouped by season.*/
-const PodInfo: React.FC<PodInfoProps> = ({ id }) => {
-  const dispatch = useAppDispatch();
-  const data = useAppSelector((state) => state);
-  const [selectedTab, setSelectedTab] = useState(0); // State to manage the selected tab (season).
-
-  // Fetch individual podcast data based on the provided id whenever the id changes.
-  useEffect(() => {
-    dispatch(fetchIndivdualPodcast(id));
-  }, [dispatch, id]);
-
-  // Extract podcast data from the state.
-  const podcastData = data.individualPodcast.data;
-
-  // Render a loading state if the podcast data is not available or if the seasons are missing.
-  if (!podcastData || !Array.isArray(podcastData.seasons)) {
-    return <p>Loading...</p>;
-  }
-
-  // Destructure description and seasons from the podcast data.
-  const { description, seasons } = podcastData as PodcastData ;
-  console.log(seasons);
-
-  return (
-    <div>
-      <h6>{description}</h6>
-      <Tabs
-        aria-label='Vertical tabs'
-        orientation='vertical'
-        value={selectedTab}
-        onChange={(event, newValue) => setSelectedTab(newValue)} // Update selected tab when the user clicks on a different season.
-        sx={{
-          minWidth: 300,
-          height: 160,
-        }}
-      >
-        <TabList
-          sx={{
-            overflow: "auto", // Allow horizontal scrolling of tabs.
-            scrollSnapType: "x mandatory", // Ensure smooth snapping between tabs.
-            "&::-webkit-scrollbar": { display: "none" }, // Hide the scrollbar for better UI.
-          }}
-        >
-          {/* Render a Tab for each season */}
-          {seasons.map((season, index) => (
-            <Tab key={season.season} value={index}>
-              Season {season.season}
-            </Tab>
-          ))}
-        </TabList>
-        {/* Render corresponding TabPanel for each season */}
-        {seasons.map((season, index) => (
-          <TabPanel
-            key={season.season}
-            value={index}
-            sx={{
-              overflow: "auto",
-              scrollSnapType: "x mandatory",
-              "&::-webkit-scrollbar": { display: "none" },
-            }}
-          >
-            <h4>Episodes for Season {season.season}</h4>
-            <ul>
-              {/* List each episode within the season */}
-              {season.episodes.map((episode) => (
-                <li key={episode.id}>{episode.title}</li>
-              ))}
-            </ul>
-          </TabPanel>
-        ))}
-      </Tabs>
-    </div>
-  );
-};
-
-// SinglePod component represents each individual podcast within the accordion,
-// displaying its summary, title, and expandable details with PodInfo component.
+/** 
+ * SinglePod component represents each individual podcast within the accordion,
+ * displaying its summary, title, and expandable details with PodInfo component.
+ */
 const SinglePod: React.FC<SinglePodProps> = (props) => {
   const date = new Date(props.podcastDate); // Format the podcast's date.
 
@@ -158,15 +63,15 @@ const SinglePod: React.FC<SinglePodProps> = (props) => {
     >
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />} // Icon for expanding/collapsing the accordion.
-        aria-controls='panel3-content'
-        id='panel3-header'
-        className='accordian--singlePod--summary'
+        aria-controls="panel3-content"
+        id="panel3-header"
+        className="accordian--singlePod--summary"
       >
         {/* Accordion summary showing the podcast's image, title, and season count */}
-        <div className='accordian--singlePod'>
-          <img src={props.podcastImg} height='100px' alt='Podcast' />
+        <div className="accordian--singlePod">
+          <img src={props.podcastImg} height="100px" alt="Podcast" />
 
-          <div className='accordian--singlePod--div'>
+          <div className="accordian--singlePod--div">
             <p>
               <h3>{props.podcastTitle}</h3> {date.toLocaleDateString()}
             </p>
@@ -190,9 +95,11 @@ const SinglePod: React.FC<SinglePodProps> = (props) => {
   );
 };
 
-// Podcasts component fetches and displays a list of podcasts,
-// managing their expanded state to show or hide details.
-const Podcasts: React.FC = () => {
+/** 
+ * PodcastList component fetches and displays a list of podcasts,
+ * managing their expanded state to show or hide details.
+ */
+const PodcastList: React.FC = () => {
   const dispatch = useAppDispatch();
   const data = useAppSelector((state) => state);
   const [expandedId, setExpandedId] = useState<string | null>(null); // Manage which podcast accordion is expanded.
@@ -230,4 +137,4 @@ const Podcasts: React.FC = () => {
   );
 };
 
-export default Podcasts;
+export default PodcastList;
