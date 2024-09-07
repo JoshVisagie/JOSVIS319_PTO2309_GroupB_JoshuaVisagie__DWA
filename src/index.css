@@ -29,3 +29,13 @@ background-color: #E7F1FF;
   height: 70px;
 
 }
+
+.episode-card{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #E7F1FF;
+  background-color: #00AEFF;
+  border-radius: 15px;
+}
+

@@ -6,17 +6,20 @@ import { useAppDispatch, useAppSelector } from "../reduxHooks";
 import { fetchIndivdualPodcast } from "../state/podcasts/individualPodcastSlice";
 
 // mui imports
-import Tabs from "@mui/joy/Tabs";
-import TabList from "@mui/joy/TabList";
-import Tab from "@mui/joy/Tab";
-import { TabPanel } from "@mui/joy";
+import { Select, MenuItem, FormControl, InputLabel, CircularProgress } from "@mui/material";
+
+// component imports
+import EpisodeCard from "./EpisodeCard";
 
 /** 
  * Interface representing a single episode
  */
 interface Episode {
-  id: string; // Unique identifier for the episode
-  title: string; // Title of the episode
+    id: string;              // Unique identifier for the episode
+    title: string;           // Title of the episode
+    description: string;     // Description of the episode
+    episode: number;         // Episode number
+    file: string;            // URL for the audio file of the episode
 }
 
 /** 
@@ -49,7 +52,7 @@ interface PodInfoProps {
 const PodInfo: React.FC<PodInfoProps> = ({ id }) => {
   const dispatch = useAppDispatch();
   const data = useAppSelector((state) => state);
-  const [selectedTab, setSelectedTab] = useState(0); // State to manage the selected tab (season).
+  const [selectedSeason, setSelectedSeason] = useState<number | ''>(''); // State to manage the selected season.
 
   // Fetch individual podcast data based on the provided id whenever the id changes.
   useEffect(() => {
@@ -61,7 +64,7 @@ const PodInfo: React.FC<PodInfoProps> = ({ id }) => {
 
   // Render a loading state if the podcast data is not available or if the seasons are missing.
   if (!podcastData || !Array.isArray(podcastData.seasons)) {
-    return <p>Loading...</p>;
+    return <CircularProgress />;
   }
 
   // Destructure description and seasons from the podcast data.
@@ -70,51 +73,35 @@ const PodInfo: React.FC<PodInfoProps> = ({ id }) => {
   return (
     <div>
       <h6>{description}</h6>
-      <Tabs
-        aria-label="Vertical tabs"
-        orientation="vertical"
-        value={selectedTab}
-        onChange={(event, newValue) => setSelectedTab(newValue)} // Update selected tab when the user clicks on a different season.
-        sx={{
-          minWidth: 300,
-          height: 160,
-        }}
-      >
-        <TabList
-          sx={{
-            overflow: "auto", // Allow horizontal scrolling of tabs.
-            scrollSnapType: "x mandatory", // Ensure smooth snapping between tabs.
-            "&::-webkit-scrollbar": { display: "none" }, // Hide the scrollbar for better UI.
-          }}
+      <FormControl fullWidth>
+        <InputLabel id="season-select-label">Select Season</InputLabel>
+        <Select
+          labelId="season-select-label"
+          value={selectedSeason}
+          onChange={(event) => setSelectedSeason(event.target.value as number)}
+          label="Select Season"
         >
-          {/* Render a Tab for each season */}
-          {seasons.map((season, index) => (
-            <Tab key={season.season} value={index}>
+          {/* Render a MenuItem for each season */}
+          {seasons.map((season) => (
+            <MenuItem key={season.season} value={season.season}>
               Season {season.season}
-            </Tab>
+            </MenuItem>
           ))}
-        </TabList>
-        {/* Render corresponding TabPanel for each season */}
-        {seasons.map((season, index) => (
-          <TabPanel
-            key={season.season}
-            value={index}
-            sx={{
-              overflow: "auto",
-              scrollSnapType: "x mandatory",
-              "&::-webkit-scrollbar": { display: "none" },
-            }}
-          >
-            <h4>Episodes for Season {season.season}</h4>
-            <ul>
-              {/* List each episode within the season */}
-              {season.episodes.map((episode) => (
-                <li key={episode.id}>{episode.title}</li>
-              ))}
-            </ul>
-          </TabPanel>
-        ))}
-      </Tabs>
+        </Select>
+      </FormControl>
+
+      {/* Display episodes for the selected season */}
+      {selectedSeason && (
+        <div>
+          {seasons
+            .find((season) => season.season === selectedSeason)
+            ?.episodes.map((episode) => (
+              <EpisodeCard key={episode.id} episode={episode}>
+                {episode.title}
+              </EpisodeCard>
+            ))}
+        </div>
+      )}
     </div>
   );
 };
