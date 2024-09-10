@@ -4,18 +4,27 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import Grid from "@mui/joy/Grid";
 
 // Props interface for EpisodeCard
 interface EpisodeCardProps {
   episode: Episode; // Single episode object passed as prop
 }
 
+// Props interface for Episode
+interface Episode {
+  id: string;
+  title: string;
+  description: string;
+  episode: number;
+  file: string;
+}
+
 const EpisodeCard: React.FC<EpisodeCardProps> = ({ episode }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const audioRef = React.useRef<HTMLAudioElement>(null);
-    
-  //TODO use redux to handle this
+
   // Handles play and pause functionality
   const handlePlayPause = () => {
     if (audioRef.current) {
@@ -27,21 +36,31 @@ const EpisodeCard: React.FC<EpisodeCardProps> = ({ episode }) => {
       setIsPlaying(!isPlaying);
     }
   };
-  
-    //TODO use redux to handle this
+
   // Handles like/unlike functionality
   const handleLike = () => {
     setIsLiked(!isLiked);
   };
 
   return (
-    <div
-      className='episode-card'
-      style={{ border: "1px solid #ccc", padding: "10px", margin: "10px" }}
+    <Grid
+      container
+      alignItems="center"
+      spacing={0}
+      sx={{
+        borderBottom: "1px solid #ddd",
+        padding: "8px 16px",
+        width: "100%",
+      }}
     >
-      <h4>{episode.title}</h4>
-      <audio ref={audioRef} src={episode.file} />
-      <div className="episode--cards--buttons">
+      <Grid item xs>
+        <h4>
+          {episode.episode}. {episode.title}
+        </h4>
+      </Grid>
+
+      <Grid item>
+        <audio ref={audioRef} src={episode.file} />
         {/* Play/Pause Button */}
         <IconButton onClick={handlePlayPause}>
           {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
@@ -49,10 +68,10 @@ const EpisodeCard: React.FC<EpisodeCardProps> = ({ episode }) => {
 
         {/* Like Button */}
         <IconButton onClick={handleLike}>
-          {isLiked ? <FavoriteIcon color='error' /> : <FavoriteBorderIcon />}
+          {isLiked ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
         </IconButton>
-      </div>
-    </div>
+      </Grid>
+    </Grid>
   );
 };
 

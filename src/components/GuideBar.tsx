@@ -1,69 +1,24 @@
+import * as React from 'react';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
 
-import { useState } from "react";
-import Button from '@mui/joy/Button';
-import HomeIcon from '@mui/icons-material/Home';
-import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
-import SettingsIcon from '@mui/icons-material/Settings';
-import TextField from '@mui/material/TextField';
-
-
-interface Props{
-  title:string|JSX.Element;
-  icon: JSX.Element;
-}
-
-const Search = ()=>{
-
-  return(
-    <div>
-        <TextField id="outlined-search" label="Search field" type="search" 
-        sx={{
-          bgcolor:"#00AEFF",
-          
-        }}
-        />
-     </div>
-      )
-}
-
-
-const GuideButton : React.FC<Props> = (props) => {
-  const [hover, setHover] = useState(false);
-
-  const handleOver = () => {
-    setHover(true);
-  };
-  const handleOut = () => {
-    setHover(false);
-  };
+export default function DenseAppBar() {
   return (
-    <Button  className="guide--button"
-    onMouseOver={handleOver} 
-    onMouseOut={handleOut} 
-    sx={{
-      bgcolor:"#00AEFF",
-      margin:"2px",
-      fontSize :'3 Rem',
-      width : hover ? '150px':'10px'
-    }}
-    >
-      {hover?props.title:props.icon}
-    </Button>
-  ); 
-};
-
-const GuideBar = () => {
-  return (
-    <div className="guideBar">
-      
-      <GuideButton title="Home" icon ={<HomeIcon/>}/>
-      <GuideButton title="favorites" icon = {<RocketLaunchIcon/>}/>
-      <GuideButton title={<Search/>} icon={<SettingsIcon/>}/>
-      <GuideButton title="user" icon={<SettingsIcon/>}/>
-      <GuideButton title="settings" icon={<SettingsIcon/>}/>
-     
-    </div>
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="sticky">
+        <Toolbar variant="dense">
+          <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" color="inherit" component="div">
+            Photos
+          </Typography>
+        </Toolbar>
+      </AppBar>
+    </Box>
   );
-};
-
-export default GuideBar;
+}

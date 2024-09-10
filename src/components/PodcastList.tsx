@@ -12,6 +12,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Button from "@mui/material/Button";
+import { Grid } from "@mui/joy";
 
 // PodInfo component import
 import PodInfo from "./PodInfo";
@@ -41,7 +42,7 @@ interface SinglePodProps {
   podcastDate: string;            // Date when the podcast was last updated
   podcastDescription: string;     // Description of the podcast
   expanded: boolean;              // Whether the accordion is expanded
-  handleChange: (id: string) => void; // Function to handle accordion expand/collapse
+  handleCollapse: (id: string) => void; // Function to handle accordion expand/collapse
 }
 
 /** 
@@ -54,33 +55,39 @@ const SinglePod: React.FC<SinglePodProps> = (props) => {
   return (
     <Accordion
       expanded={props.expanded} // Controls whether the accordion is expanded or collapsed.
-      onChange={() => props.handleChange(props.podcastID)} // Toggle expanded state when clicked.
+      onChange={() => props.handleCollapse(props.podcastID)} // Toggle expanded state when clicked.
       square={false}
       sx={{
-        borderRadius: "50px", // Rounded corners for the accordion.
-        margin: "20px", // Space around the accordion.
+        borderRadius: "15px",
+        margin: "20px", 
       }}
     >
       <AccordionSummary
-        expandIcon={<ExpandMoreIcon />} // Icon for expanding/collapsing the accordion.
+        expandIcon={<ExpandMoreIcon />} 
         aria-controls="panel3-content"
         id="panel3-header"
         className="accordian--singlePod--summary"
       >
         {/* Accordion summary showing the podcast's image, title, and season count */}
-        <div className="accordian--singlePod">
-          <img src={props.podcastImg} height="100px" alt="Podcast" />
-
-          <div className="accordian--singlePod--div">
-            <p>
+        <Grid container 
+        className="accordian--singlePod"
+        sx={{
+            padding: '8px 16px', 
+            width:"100%", 
+        }}>
+          <Grid item>
+          <img className="accordian--logo" src={props.podcastImg} height="100px" alt="Podcast Logo" />
+          </Grid>
+          <Grid xs className="accordian--singlePod--div">
+            
               <h3>{props.podcastTitle}</h3> {date.toLocaleDateString()}
-            </p>
+           
             <p>
               {props.podcastSeasons}{" "}
               {props.podcastSeasons > 1 ? "Seasons" : "Season"}
             </p>
-          </div>
-        </div>
+          </Grid>
+        </Grid>
       </AccordionSummary>
       <AccordionDetails>
         {/* Display detailed information of the podcast when expanded */}
@@ -100,8 +107,9 @@ const SinglePod: React.FC<SinglePodProps> = (props) => {
  * managing their expanded state to show or hide details.
  */
 const PodcastList: React.FC = () => {
+  const data = useAppSelector((state) => state.podcasts);
   const dispatch = useAppDispatch();
-  const data = useAppSelector((state) => state);
+ 
   const [expandedId, setExpandedId] = useState<string | null>(null); // Manage which podcast accordion is expanded.
 
   // Fetch all podcasts when the component mounts.
@@ -110,16 +118,16 @@ const PodcastList: React.FC = () => {
   }, [dispatch]);
 
   // Handle expanding/collapsing a specific podcast accordion.
-  const handleChange = (id: string) => {
+  const handleCollapse = (id: string) => {
     setExpandedId((prev) => (prev === id ? null : id)); // Collapse if clicked again, otherwise expand.
   };
 
   return (
     <div>
       {/* Display loading state if podcasts are still being fetched */}
-      {data.podcasts.isLoading && <p>Loading...</p>}
+      {data.isLoading && <p>Loading...</p>}
       {/* Render each podcast within an accordion */}
-      {data.podcasts.data.map((podcast: Podcast) => (
+      {data.data.map((podcast: Podcast) => (
         <SinglePod
           key={podcast.id}
           podcastTitle={podcast.title}
@@ -130,7 +138,7 @@ const PodcastList: React.FC = () => {
           podcastDate={podcast.updated}
           podcastDescription={podcast.description}
           expanded={expandedId === podcast.id} // Expand the accordion if its ID matches the expanded one.
-          handleChange={handleChange}
+          handleCollapse={handleCollapse}
         />
       ))}
     </div>
