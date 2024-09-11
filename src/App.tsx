@@ -1,18 +1,15 @@
 
-import React, { useContext, useState } from "react";
-import Button from '@mui/joy/Button';
-import GuideBar from "./components/GuideBar";
-import RecomendedCarousel from "./components/Carousel";
+import GuideBar from "./components/ui/GuideBar";
+import RecomendedCarousel from "./components/ui/Carousel";
 import Content from "./components/Content";
 function App() {
-
   return (
     <div>
-      <RecomendedCarousel/>
-      <GuideBar/>
-      <Content/>
+      <RecomendedCarousel />
+      <GuideBar />
+      <Content />
     </div>
-   )
+  );
 }
 
 export default App;

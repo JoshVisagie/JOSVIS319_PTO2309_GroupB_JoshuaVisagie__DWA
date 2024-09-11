@@ -1,9 +1,9 @@
 // react imports
 import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../reduxHooks";
+import { useAppDispatch, useAppSelector } from "../../../reduxHooks";
 
 // redux imports
-import { fetchIndivdualPodcast } from "../state/podcasts/individualPodcastSlice";
+import { fetchIndivdualPodcast } from "../../../state/podcasts/individualPodcastSlice";
 
 // mui imports
 import {
@@ -14,7 +14,6 @@ import {
   CircularProgress,
 } from "@mui/material";
 import Stack from "@mui/joy/Stack";
-
 
 // component imports
 import EpisodeCard from "./EpisodeCard";
@@ -80,7 +79,6 @@ const PodInfo: React.FC<PodInfoProps> = ({ id }) => {
 
   return (
     <div>
- 
       <div>
         <FormControl fullWidth>
           <InputLabel id='season-select-label'>Select Season</InputLabel>

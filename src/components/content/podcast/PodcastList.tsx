@@ -1,9 +1,9 @@
 // react imports
 import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../reduxHooks";
+import { useAppDispatch, useAppSelector } from "../../../reduxHooks";
 
 // redux imports
-import { fetchPodcasts } from "../state/podcasts/podcastsSlice";
+import { fetchPodcasts } from "../../../state/podcasts/podcastsSlice";
 
 // mui imports
 import Accordion from "@mui/material/Accordion";
@@ -17,8 +17,8 @@ import { Grid } from "@mui/joy";
 // PodInfo component import
 import PodInfo from "./PodInfo";
 
-/** 
- * Interface representing a podcast 
+/**
+ * Interface representing a podcast
  */
 interface Podcast {
   id: string; // Unique identifier for the podcast
@@ -30,22 +30,22 @@ interface Podcast {
   description: string; // Description of the podcast
 }
 
-/** 
+/**
  * Define the props interface for the SinglePod component
  */
 interface SinglePodProps {
-  podcastTitle: string;           // Title of the podcast
-  podcastID: string;              // Unique identifier for the podcast
-  podcastGenres: string[];        // Array of genres the podcast belongs to
-  podcastSeasons: number;         // Number of seasons in the podcast
-  podcastImg: string;             // URL of the podcast image
-  podcastDate: string;            // Date when the podcast was last updated
-  podcastDescription: string;     // Description of the podcast
-  expanded: boolean;              // Whether the accordion is expanded
+  podcastTitle: string; // Title of the podcast
+  podcastID: string; // Unique identifier for the podcast
+  podcastGenres: string[]; // Array of genres the podcast belongs to
+  podcastSeasons: number; // Number of seasons in the podcast
+  podcastImg: string; // URL of the podcast image
+  podcastDate: string; // Date when the podcast was last updated
+  podcastDescription: string; // Description of the podcast
+  expanded: boolean; // Whether the accordion is expanded
   handleCollapse: (id: string) => void; // Function to handle accordion expand/collapse
 }
 
-/** 
+/**
  * SinglePod component represents each individual podcast within the accordion,
  * displaying its summary, title, and expandable details with PodInfo component.
  */
@@ -59,29 +59,34 @@ const SinglePod: React.FC<SinglePodProps> = (props) => {
       square={false}
       sx={{
         borderRadius: "15px",
-        margin: "20px", 
+        margin: "20px",
       }}
     >
       <AccordionSummary
-        expandIcon={<ExpandMoreIcon />} 
-        aria-controls="panel3-content"
-        id="panel3-header"
-        className="accordian--singlePod--summary"
+        expandIcon={<ExpandMoreIcon />}
+        aria-controls='panel3-content'
+        id='panel3-header'
+        className='accordian--singlePod--summary'
       >
         {/* Accordion summary showing the podcast's image, title, and season count */}
-        <Grid container 
-        className="accordian--singlePod"
-        sx={{
-            padding: '8px 16px', 
-            width:"100%", 
-        }}>
+        <Grid
+          container
+          className='accordian--singlePod'
+          sx={{
+            padding: "8px 16px",
+            width: "100%",
+          }}
+        >
           <Grid item>
-          <img className="accordian--logo" src={props.podcastImg} height="100px" alt="Podcast Logo" />
+            <img
+              className='accordian--logo'
+              src={props.podcastImg}
+              height='100px'
+              alt='Podcast Logo'
+            />
           </Grid>
-          <Grid xs className="accordian--singlePod--div">
-            
-              <h3>{props.podcastTitle}</h3> {date.toLocaleDateString()}
-           
+          <Grid xs className='accordian--singlePod--div'>
+            <h3>{props.podcastTitle}</h3> {date.toLocaleDateString()}
             <p>
               {props.podcastSeasons}{" "}
               {props.podcastSeasons > 1 ? "Seasons" : "Season"}
@@ -102,14 +107,14 @@ const SinglePod: React.FC<SinglePodProps> = (props) => {
   );
 };
 
-/** 
+/**
  * PodcastList component fetches and displays a list of podcasts,
  * managing their expanded state to show or hide details.
  */
 const PodcastList: React.FC = () => {
   const data = useAppSelector((state) => state.podcasts);
   const dispatch = useAppDispatch();
- 
+
   const [expandedId, setExpandedId] = useState<string | null>(null); // Manage which podcast accordion is expanded.
 
   // Fetch all podcasts when the component mounts.
@@ -122,13 +127,11 @@ const PodcastList: React.FC = () => {
     setExpandedId((prev) => (prev === id ? null : id)); // Collapse if clicked again, otherwise expand.
   };
 
-
-
   return (
     <div>
       {/* Display loading state if podcasts are still being fetched */}
       {data.isLoading && <p>Loading...</p>}
-      
+
       {/* Render each podcast within an accordion */}
       {data.data.map((podcast: Podcast) => (
         <SinglePod

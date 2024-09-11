@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Box, Button, TextField, Typography, Container } from "@mui/material";
 import { createClient } from "@supabase/supabase-js";
-import { useAppDispatch } from "../reduxHooks"; // Hook to dispatch actions
-import { logIn, logOut } from "../state/userData/userDataSlice"; // Actions to update user state
-import { useAppSelector } from "../reduxHooks";
-import { Try } from "@mui/icons-material";
+import { useAppDispatch } from "../../../reduxHooks"; // Hook to dispatch actions
+import { logIn, logOut } from "../../../state/userData/userDataSlice"; // Actions to update user state
+import { useAppSelector } from "../../../reduxHooks";
 
 type AuthFormProps = {
   isSignUp?: boolean; // Determines if the form is for sign-up or login
@@ -38,13 +37,11 @@ const AuthForm: React.FC<AuthFormProps> = () => {
   const user = useAppSelector((state) => state.userData.user);
   const loggedIn = useAppSelector((state) => state.userData.loggedIn);
 
-  
-
   useEffect(() => {
     // Define an async function to handle fetching and dispatching
     const fetchUser = async () => {
       const AlreadyLoggedInUser = await getSupabaseUser();
-     
+
       // Dispatch if there is a logged-in user
       if (AlreadyLoggedInUser) {
         dispatch(logIn(AlreadyLoggedInUser));
@@ -52,7 +49,7 @@ const AuthForm: React.FC<AuthFormProps> = () => {
     };
 
     fetchUser();
-  }, [dispatch])
+  }, [dispatch]);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
