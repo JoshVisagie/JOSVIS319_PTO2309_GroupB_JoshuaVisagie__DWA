@@ -3,16 +3,14 @@ import React, { useContext, useState } from "react";
 import Button from '@mui/joy/Button';
 import GuideBar from "./components/GuideBar";
 import RecomendedCarousel from "./components/Carousel";
-import Podcasts from "./components/PodcastList";
-import LoginForm from "./components/LoginForm";
+import Content from "./components/Content";
 function App() {
 
   return (
     <div>
-      <LoginForm/>
       <RecomendedCarousel/>
       <GuideBar/>
-      <Podcasts/>
+      <Content/>
     </div>
    )
 }

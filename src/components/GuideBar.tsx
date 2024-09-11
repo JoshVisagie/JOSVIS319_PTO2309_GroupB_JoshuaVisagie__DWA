@@ -3,18 +3,18 @@ import * as React from "react";
 import FormatAlignJustifyIcon from "@mui/icons-material/FormatAlignJustify";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import { useState , useEffect} from "react";
+import { useState, useEffect } from "react";
 import currentTheme from "../style";
 
-import {useAppDispatch , useAppSelector}from "../reduxHooks"
+import { useAppDispatch, useAppSelector } from "../reduxHooks";
 import { togglePage } from "../state/display/displaySlice";
 
 //destructure theme
-const { 
-  primary: primaryColor, 
-  secondary: secondaryColor, 
-  background: backgroundColor, 
-  text: textColor 
+const {
+  primary: primaryColor,
+  secondary: secondaryColor,
+  background: backgroundColor,
+  text: textColor,
 } = currentTheme;
 
 const GuideButton = (props) => {
@@ -33,10 +33,8 @@ const GuideButton = (props) => {
   };
 
   useEffect(() => {
-    handleShrink()
-    }
-  , [props.currentNav])
-  
+    handleShrink();
+  }, [props.currentNav]);
 
   return (
     <ToggleButton
@@ -45,23 +43,22 @@ const GuideButton = (props) => {
       onMouseEnter={handleExpand}
       onMouseLeave={handleShrink}
       sx={{
-        borderRadius:"12px",
-        margin:"20px",
-        border:"0",
+        borderRadius: "12px",
+        margin: "20px",
+        border: "0",
         backgroundColor: primaryColor,
-        color:secondaryColor,
+        color: secondaryColor,
         "&.Mui-selected": {
           backgroundColor: secondaryColor,
-          color: textColor, 
-          scale:1.2,
-          boxShadow:3
-
+          color: textColor,
+          scale: 1.2,
+          boxShadow: 3,
         },
         "&:hover": {
-          backgroundColor: primaryColor, 
-          scale:1.2,
-          opacity: 0.8, 
-          boxShadow:1
+          backgroundColor: primaryColor,
+          scale: 1.2,
+          opacity: 0.8,
+          boxShadow: 1,
         },
       }}
     >
@@ -71,16 +68,11 @@ const GuideButton = (props) => {
 };
 
 export default function GuideBar() {
-
   const dispatch = useAppDispatch();
-  const nav = useAppSelector((state)=>state.display.page)
-  const handleNav = (
-    event: React.MouseEvent<HTMLElement>,
-    newNav: string 
-  ) => {
-  dispatch(togglePage(newNav))
-    
-      };
+  const nav = useAppSelector((state) => state.display.page);
+  const handleNav = (event: React.MouseEvent<HTMLElement>, newNav: string) => {
+    dispatch(togglePage(newNav));
+  };
 
   return (
     <ToggleButtonGroup
