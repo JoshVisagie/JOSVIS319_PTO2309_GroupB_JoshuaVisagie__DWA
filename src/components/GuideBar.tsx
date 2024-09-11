@@ -6,6 +6,9 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { useState , useEffect} from "react";
 import currentTheme from "../style";
 
+import {useAppDispatch , useAppSelector}from "../reduxHooks"
+import { togglePage } from "../state/display/displaySlice";
+
 //destructure theme
 const { 
   primary: primaryColor, 
@@ -68,15 +71,16 @@ const GuideButton = (props) => {
 };
 
 export default function GuideBar() {
-  const [nav, setNav] = React.useState<string | null>("home");
 
+  const dispatch = useAppDispatch();
+  const nav = useAppSelector((state)=>state.display.page)
   const handleNav = (
     event: React.MouseEvent<HTMLElement>,
-    newNav: string | null
+    newNav: string 
   ) => {
-    console.log(newNav);
-    setNav(newNav);
-  };
+  dispatch(togglePage(newNav))
+    
+      };
 
   return (
     <ToggleButtonGroup

@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-// Define the User interface based on your actual user data structure
+// TODO Define the User interface based on your actual user data structure
 
 
-// Define the UserState interface
+// TODO Define the UserState interface
 
 // Initial state for the user slice
 const initialState = {
