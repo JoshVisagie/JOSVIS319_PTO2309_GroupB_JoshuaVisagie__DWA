@@ -1,11 +1,12 @@
 import * as React from "react";
 
 import FormatAlignJustifyIcon from "@mui/icons-material/FormatAlignJustify";
+import {Search, Home, Favorite, Settings, Portrait, BlurLinear} from "@mui/icons-material"
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { useState, useEffect } from "react";
 import currentTheme from "../style";
-
+import { Box } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../reduxHooks";
 import { togglePage } from "../state/display/displaySlice";
 
@@ -51,8 +52,10 @@ const GuideButton = (props) => {
         "&.Mui-selected": {
           backgroundColor: secondaryColor,
           color: textColor,
-          scale: 1.2,
+          scale: 1.3,
           boxShadow: 3,
+
+
         },
         "&:hover": {
           backgroundColor: primaryColor,
@@ -62,7 +65,7 @@ const GuideButton = (props) => {
         },
       }}
     >
-      {expanded ? <div>{props.buttonValue}</div> : <FormatAlignJustifyIcon />}
+      {expanded ? <div>{props.buttonValue}</div> : props.icon}
     </ToggleButton>
   );
 };
@@ -75,6 +78,15 @@ export default function GuideBar() {
   };
 
   return (
+    <Box
+    sx={{position: "sticky",
+      top: 0,
+      zIndex:1000,
+  backdropFilter: "blur(1px)",
+  background: 'linear-gradient(to bottom, rgba(231, 241, 255, 1) 0%,rgba(255,255,255,0) 100%)'
+
+    }}
+    >
     <ToggleButtonGroup
       value={nav}
       exclusive
@@ -83,13 +95,17 @@ export default function GuideBar() {
       sx={{
         display: "flex",
         justifyContent: "center",
+        
+        
       }}
     >
-      <GuideButton buttonValue='home' buttonLabel='home' currentNav={nav} />
-      <GuideButton buttonValue='liked' buttonLabel='home' currentNav={nav} />
-      <GuideButton buttonValue='search' buttonLabel='home' currentNav={nav} />
-      <GuideButton buttonValue='settings' buttonLabel='home' currentNav={nav} />
-      <GuideButton buttonValue='user' buttonLabel='home' currentNav={nav} />
+      <GuideButton buttonValue='home' buttonLabel='home' currentNav={nav} icon = {<Home/>}/>
+      <GuideButton buttonValue='liked' buttonLabel='home' currentNav={nav} icon = {<Favorite/>}/>
+      <GuideButton buttonValue='search' buttonLabel='home' currentNav={nav} icon = {<Search/>}/>
+      <GuideButton buttonValue='user' buttonLabel='home' currentNav={nav} icon = {<Portrait/>}/>
+      <GuideButton buttonValue='settings' buttonLabel='home' currentNav={nav} icon = {<Settings/>}/>
     </ToggleButtonGroup>
+    </Box>
   );
+  
 }

@@ -1,34 +1,96 @@
 import "react-responsive-carousel/lib/styles/carousel.min.css"; 
 import { Carousel } from 'react-responsive-carousel';
 import { Card } from "@mui/material";
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
+import Box from '@mui/material/Box';
+
+import { useAppSelector } from "../reduxHooks";
+import { useEffect , useState} from "react";
+import { WidthNormal } from "@mui/icons-material";
+ 
+
 const CarouselCard = () =>{
+  
+  const podcasts = useAppSelector((state) => state.podcasts.data);
+  const [randomPod, setRandomPod] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (podcasts.length > 0) {
+      const randomIndex = Math.floor(podcasts.length * Math.random());
+      setRandomPod(randomIndex);
+    }
+  }, [podcasts]);
+
+  const currentPodcast = podcasts[randomPod ?? 0]; 
+
+  const imageUrl = currentPodcast?.image ?? '';
+  const title = currentPodcast?.title ?? 'Unknown Title';
+
+        
+
     return(
         
-        <Card sx={{display:"flex"}}>
-      <CardMedia
-        sx={{ width:"50%"}}
-        image="https://www.billboard.com/wp-content/uploads/media/tyler-the-creator-igor-album-art-2019-billboard-embed.jpg?w=600"
-        title="green iguana"
-      />
-      <CardContent sx={{width:"50%"}}>
-        <Typography gutterBottom variant="h5" component="div">
-          Lizard
-        </Typography>
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          Lizards are a widespread group of squamate reptiles, with over 6,000
-          species, ranging across all continents except Antarctica
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small">Share</Button>
-        <Button size="small">Learn More</Button>
-      </CardActions>
+      <Card
+      sx={{
+        position: 'relative',
+        width: '100%',
+        height:'200px',
+        cursor: 'pointer',
+        overflow: 'hidden',
+        borderRadius: 2,
+      }}
+    >
+      <Box
+        sx={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          filter: 'blur(50px)',
+          zIndex: 1,
+        }}
+      >
+        <img
+          src={imageUrl}
+          alt="background"
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+          }}
+        />
+      </Box>
+      <Box
+        sx={{
+          position: 'relative',
+          height: '20%',
+          width: '100%',
+          zIndex: 2,
+        }}
+      >
+        <img
+          src={imageUrl}
+          alt="foreground"
+          style={{
+            maxHeight:"140px",
+            padding: "10px",
+            maxWidth: "140px",
+            borderRadius:"22px",
+            
+          }}
+        />
+         <Typography variant="h4"
+         sx={{
+          color:"white",
+          fontWeight:"bold",
+          overflowy:"scroll",
+
+         }}
+         >{title}</Typography>
+      </Box>
+      
     </Card>
         
 
@@ -43,17 +105,13 @@ const RecomendedCarousel=()=>{
         infiniteLoop={true}
         showThumbs={false}
         >
-        <div>
-            <CarouselCard/>
-        </div>
-        <div>
+        <CarouselCard/>
+        <CarouselCard/>
+        <CarouselCard/>
+        <CarouselCard/>
+        <CarouselCard/>
         <CarouselCard/>
 
-        </div>
-        <div>
-        <CarouselCard/>
-
-        </div>
     </Carousel>
 
     )

@@ -122,10 +122,13 @@ const PodcastList: React.FC = () => {
     setExpandedId((prev) => (prev === id ? null : id)); // Collapse if clicked again, otherwise expand.
   };
 
+
+
   return (
     <div>
       {/* Display loading state if podcasts are still being fetched */}
       {data.isLoading && <p>Loading...</p>}
+      
       {/* Render each podcast within an accordion */}
       {data.data.map((podcast: Podcast) => (
         <SinglePod
