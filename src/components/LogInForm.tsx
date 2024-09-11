@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Button, TextField, Typography, Container } from "@mui/material";
 import { createClient } from "@supabase/supabase-js";
 import { useAppDispatch } from "../reduxHooks"; // Hook to dispatch actions
 import { logIn, logOut } from "../state/userData/userDataSlice"; // Actions to update user state
 import { useAppSelector } from "../reduxHooks";
+import { Try } from "@mui/icons-material";
+
 type AuthFormProps = {
   isSignUp?: boolean; // Determines if the form is for sign-up or login
 };
@@ -14,6 +16,18 @@ const supabase = createClient(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVyYWJxZm1rdHdneWF6YXVld3JvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjU4MTMxOTEsImV4cCI6MjA0MTM4OTE5MX0.H-oeI-ULMFiMZDy72X0BYKhCThxFZnY25wgaPBST5Jk"
 );
 
+const getSupabaseUser = async () => {
+  try {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    return user;
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    return null;
+  }
+};
+
 const AuthForm: React.FC<AuthFormProps> = () => {
   const dispatch = useAppDispatch();
   const [email, setEmail] = useState("");
@@ -23,6 +37,22 @@ const AuthForm: React.FC<AuthFormProps> = () => {
 
   const user = useAppSelector((state) => state.userData.user);
   const loggedIn = useAppSelector((state) => state.userData.loggedIn);
+
+  
+
+  useEffect(() => {
+    // Define an async function to handle fetching and dispatching
+    const fetchUser = async () => {
+      const AlreadyLoggedInUser = await getSupabaseUser();
+     
+      // Dispatch if there is a logged-in user
+      if (AlreadyLoggedInUser) {
+        dispatch(logIn(AlreadyLoggedInUser));
+      }
+    };
+
+    fetchUser();
+  }, [dispatch])
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -44,9 +74,7 @@ const AuthForm: React.FC<AuthFormProps> = () => {
           alert(error.message);
           return;
         }
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
+        const user = getSupabaseUser();
 
         dispatch(logIn(user)); // Dispatch login action with the user data
         alert("Sign-up successful! Please verify your email.");
@@ -74,14 +102,11 @@ const AuthForm: React.FC<AuthFormProps> = () => {
     setIsSignUp((currentSignUpState) => !currentSignUpState);
   };
 
-   const  handleSignOut=async()=>{
-     
-    const { error } = await supabase.auth.signOut()
-    dispatch(logOut())
-    console.log(error)
-    
-
-  }
+  const handleSignOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    dispatch(logOut());
+    console.log(error);
+  };
   return (
     <div>
       {" "}

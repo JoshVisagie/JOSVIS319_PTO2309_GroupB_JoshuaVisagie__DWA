@@ -1,11 +1,18 @@
 import * as React from "react";
-import FormatAlignLeftIcon from "@mui/icons-material/FormatAlignLeft";
-import FormatAlignCenterIcon from "@mui/icons-material/FormatAlignCenter";
-import FormatAlignRightIcon from "@mui/icons-material/FormatAlignRight";
+
 import FormatAlignJustifyIcon from "@mui/icons-material/FormatAlignJustify";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { useState , useEffect} from "react";
+import currentTheme from "../style";
+
+//destructure theme
+const { 
+  primary: primaryColor, 
+  secondary: secondaryColor, 
+  background: backgroundColor, 
+  text: textColor 
+} = currentTheme;
 
 const GuideButton = (props) => {
   const [expanded, setExpanded] = useState(false);
@@ -37,7 +44,22 @@ const GuideButton = (props) => {
       sx={{
         borderRadius:"12px",
         margin:"20px",
-        border:"0"
+        border:"0",
+        backgroundColor: primaryColor,
+        color:secondaryColor,
+        "&.Mui-selected": {
+          backgroundColor: secondaryColor,
+          color: textColor, 
+          scale:1.2,
+          boxShadow:3
+
+        },
+        "&:hover": {
+          backgroundColor: primaryColor, 
+          scale:1.2,
+          opacity: 0.8, 
+          boxShadow:1
+        },
       }}
     >
       {expanded ? <div>{props.buttonValue}</div> : <FormatAlignJustifyIcon />}
