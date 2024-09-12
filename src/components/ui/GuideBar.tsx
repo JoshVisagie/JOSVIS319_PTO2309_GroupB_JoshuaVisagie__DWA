@@ -17,6 +17,8 @@ import { Box } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../reduxHooks";
 import { togglePage } from "../../state/display/displaySlice";
 
+import SearchButton from "../content/search/SearchButton";
+
 //destructure theme
 const {
   primary: primaryColor,
@@ -27,22 +29,43 @@ const {
 
 const GuideButton = (props) => {
   const [expanded, setExpanded] = useState(false);
+  const [isInputFocused, setIsInputFocused] = useState(false);
 
   const handleExpand = () => {
     setExpanded(true);
   };
 
   const handleShrink = () => {
-    if (props.currentNav == props.buttonValue) {
-      return;
-    } else {
+    if (!isInputFocused && props.currentNav !== props.buttonValue) {
       setExpanded(false);
     }
+  };
+
+  const handleInputFocus = () => {
+    setIsInputFocused(true);
+  };
+
+  const handleInputBlur = () => {
+    setIsInputFocused(false);
   };
 
   useEffect(() => {
     handleShrink();
   }, [props.currentNav]);
+
+  const searchSwitch = (value) => {
+    switch (value) {
+      case "search":
+        return (
+          <SearchButton
+            onInputFocus={handleInputFocus}
+            onInputBlur={handleInputBlur}
+          />
+        );
+      default:
+        return <div>{props.buttonValue}</div>;
+    }
+  };
 
   return (
     <ToggleButton
@@ -51,8 +74,8 @@ const GuideButton = (props) => {
       onMouseEnter={handleExpand}
       onMouseLeave={handleShrink}
       sx={{
-        borderRadius: "12px",
-        margin: "20px",
+        borderRadius: "15px",
+
         border: "0",
         backgroundColor: primaryColor,
         color: secondaryColor,
@@ -61,16 +84,18 @@ const GuideButton = (props) => {
           color: textColor,
           scale: 1.3,
           boxShadow: 3,
+          transition: "all 0.3s ease",
         },
         "&:hover": {
           backgroundColor: primaryColor,
           scale: 1.2,
           opacity: 0.8,
           boxShadow: 1,
+          transition: "all 0.3s ease",
         },
       }}
     >
-      {expanded ? <div>{props.buttonValue}</div> : props.icon}
+      {expanded ? searchSwitch(props.buttonValue) : props.icon}
     </ToggleButton>
   );
 };
@@ -78,8 +103,11 @@ const GuideButton = (props) => {
 export default function GuideBar() {
   const dispatch = useAppDispatch();
   const nav = useAppSelector((state) => state.display.page);
+
   const handleNav = (event: React.MouseEvent<HTMLElement>, newNav: string) => {
-    dispatch(togglePage(newNav));
+    if (newNav !== null && newNav !== nav) {
+      dispatch(togglePage(newNav));
+    }
   };
 
   return (
@@ -100,7 +128,9 @@ export default function GuideBar() {
         aria-label='navigation'
         sx={{
           display: "flex",
+          gap: "20px",
           justifyContent: "center",
+          padding: 3,
         }}
       >
         <GuideButton
@@ -111,25 +141,25 @@ export default function GuideBar() {
         />
         <GuideButton
           buttonValue='liked'
-          buttonLabel='home'
+          buttonLabel='liked'
           currentNav={nav}
           icon={<Favorite />}
         />
         <GuideButton
           buttonValue='search'
-          buttonLabel='home'
+          buttonLabel='search'
           currentNav={nav}
           icon={<Search />}
         />
         <GuideButton
           buttonValue='user'
-          buttonLabel='home'
+          buttonLabel='user'
           currentNav={nav}
           icon={<Portrait />}
         />
         <GuideButton
           buttonValue='settings'
-          buttonLabel='home'
+          buttonLabel='settings'
           currentNav={nav}
           icon={<Settings />}
         />

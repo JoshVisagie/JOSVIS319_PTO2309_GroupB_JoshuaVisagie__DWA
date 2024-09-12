@@ -1,7 +1,6 @@
-
 import GuideBar from "./components/ui/GuideBar";
 import RecomendedCarousel from "./components/ui/Carousel";
-import Content from "./components/Content";
+import Content from "./components/content/Content";
 function App() {
   return (
     <div>
