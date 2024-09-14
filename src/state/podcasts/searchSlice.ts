@@ -1,5 +1,14 @@
+//redux toolkit imports
 import { createSlice } from "@reduxjs/toolkit";
+
+//fuse import for fuzzy search
 import Fuse from "fuse.js";
+
+interface SearchState{
+search: string
+selectedGenres:[number]
+filteredData [Podc]
+}
 
 // Initial state for search
 const initialState = {
