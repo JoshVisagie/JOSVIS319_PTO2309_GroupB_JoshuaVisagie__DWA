@@ -62,7 +62,7 @@ const SinglePod: React.FC<SinglePodProps> = (props) => {
             color:"#FFFFFF"
           }}
         >
-          <Grid item>
+          <Grid >
             <img
               className='accordian--logo'
               src={props.podcastImg}

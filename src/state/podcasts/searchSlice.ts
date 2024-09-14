@@ -1,50 +1,87 @@
-//redux toolkit imports
-import { createSlice } from "@reduxjs/toolkit";
+// Redux Toolkit imports
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-//fuse import for fuzzy search
+// Fuse.js import for fuzzy search
 import Fuse from "fuse.js";
 
+// Import the type of a podcast from Podcasts slice
 import { Podcast } from "./podcastsSlice";
 
-import { RootState as RootStateType } from "../store";
+// Import the type of RootState for typing selectors
+import { RootState } from "../store";
 
+/** 
+ * Interface for SearchState
+ * 
+ * @property {string} search - The current search term input by the user.
+ * @property {number[]} selectedGenres - List of selected genres for filtering podcasts.
+ * @property {Podcast[]} filteredData - The list of filtered podcasts based on search and genres.
+ */
 interface SearchState {
   search: string;
   selectedGenres: number[];
   filteredData: Podcast[];
 }
 
-// Initial state for search
+// Initial state for search slice
 const initialState: SearchState = {
   search: "",
   selectedGenres: [],
   filteredData: [],
 };
 
+/**
+ * Creates a slice for handling search and filtering of podcasts.
+ * 
+ * The slice includes:
+ * - `setSearch`: Updates the search term and filters data based on it.
+ * - `setSelectedGenres`: Updates the selected genres and filters data based on them.
+ */
 const searchSlice = createSlice({
   name: "search",
   initialState,
 
   reducers: {
-    setSearch: (state, action) => {
+    /**
+     * Sets the search term and filters podcasts based on the search and selected genres.
+     * 
+     * @param {SearchState} state - The current state of the search.
+     * @param {PayloadAction<{ search: string; data: Podcast[] }>} action - Action containing the search term and podcast data.
+     */
+    setSearch: (state: SearchState, action: PayloadAction<{ search: string; data: Podcast[] }>) => {
       const { search, data } = action.payload;
-
-      // Update search term and filtered data based on search
       state.search = search;
       state.filteredData = filterPodcasts(data, search, state.selectedGenres);
     },
-    setSelectedGenres: (state, action) => {
-      const { genres, data } = action.payload;
 
-      // Update selected genres and filtered data based on genres
+    /**
+     * Sets the selected genres and filters podcasts based on the genres and search term.
+     * 
+     * @param {SearchState} state - The current state of the search.
+     * @param {PayloadAction<{ genres: number[]; data: Podcast[] }>} action - Action containing selected genres and podcast data.
+     */
+    setSelectedGenres: (state: SearchState, action: PayloadAction<{ genres: number[]; data: Podcast[] }>) => {
+      const { genres, data } = action.payload;
       state.selectedGenres = Array.isArray(genres) ? genres : [];
       state.filteredData = filterPodcasts(data, state.search, genres);
     },
   },
 });
 
-// Function to filter podcasts by search term and genres
-const filterPodcasts = (data:Podcast[], search: string , selectedGenres:number[]) => {
+/**
+ * Filters podcasts based on the search term and selected genres using Fuse.js.
+ * 
+ * @param {Podcast[]} data - The list of podcasts to filter.
+ * @param {string} search - The search term for filtering.
+ * @param {number[]} selectedGenres - The selected genres for filtering.
+ * 
+ * @returns {Podcast[]} - The filtered list of podcasts.
+ */
+const filterPodcasts = (
+  data: Podcast[],
+  search: string,
+  selectedGenres: number[]
+): Podcast[] => {
   const fuse = new Fuse(data, {
     keys: ["title", "description", "genres"],
     threshold: 0.3,
@@ -65,8 +102,13 @@ const filterPodcasts = (data:Podcast[], search: string , selectedGenres:number[]
   return filtered;
 };
 
-// Selector to get the filtered podcasts
-export const selectFilteredPodcasts = (state : RootStateType ) => state.search.filteredData;
+/**
+ * Selector to get the filtered podcasts based on search term and selected genres.
+ * 
+ * @param {RootState} state - The entire Redux state.
+ * @returns {Podcast[]} - The list of filtered podcasts.
+ */
+export const selectFilteredPodcasts = (state: RootState): Podcast[] => state.search.filteredData;
 
 export const { setSearch, setSelectedGenres } = searchSlice.actions;
 

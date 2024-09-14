@@ -7,7 +7,6 @@ import Box from "@mui/material/Box";
 
 import { useAppSelector } from "../../reduxHooks";
 import { useEffect, useState } from "react";
-import { WidthNormal } from "@mui/icons-material";
 
 const CarouselCard = () => {
   const podcasts = useAppSelector((state) => state.podcasts.data);

@@ -53,13 +53,13 @@ const EpisodeCard: React.FC<EpisodeCardProps> = ({ episode }) => {
         width: "100%",
       }}
     >
-      <Grid item xs>
+      <Grid  xs>
         <h4>
           {episode.episode}. {episode.title}
         </h4>
       </Grid>
 
-      <Grid item>
+      <Grid >
         <audio ref={audioRef} src={episode.file} />
         {/* Play/Pause Button */}
         <IconButton onClick={handlePlayPause}>
