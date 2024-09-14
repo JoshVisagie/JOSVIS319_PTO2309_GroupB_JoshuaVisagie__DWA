@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice ,createSelector} from "@reduxjs/toolkit";
 
 import { RootState } from "../store";
 // Fetch podcasts asynchronously from Podcast API on netlify
@@ -62,28 +62,30 @@ const podcastsSlice = createSlice({
   },
 });
 
-// Selector to get sorted podcasts based on the current sortType
-export const selectSortedPodcasts = (state: RootState) => {
-  const { data, sortType } = state.podcasts;
-
-  //a function to sort and compare podcasts
-  return [...data].sort((a, b) => {
-    switch (sortType) {
-      //sorting alphabetically
-      case "alphabetic":
-        return a.title.localeCompare(b.title);
-      case "revAlphabetic":
-        return b.title.localeCompare(a.title);
-      //sorting by dates
-      case "recent":
-        return new Date(b.updated).getTime() - new Date(a.updated).getTime();
-      case "oldest":
-        return new Date(a.updated).getTime() - new Date(b.updated).getTime();
-      default:
-        return 0;
-    }
-  });
-};
+// Memoized selector to get sorted podcasts based on the current sortType
+export const selectSortedPodcasts = createSelector(
+  // Input selectors
+  (state: RootState) => state.podcasts.data,
+  (state: RootState) => state.podcasts.sortType,
+  
+  // Output selector: sorting the podcasts based on sortType
+  (data, sortType) => {
+    return [...data].sort((a, b) => {
+      switch (sortType) {
+        case 'alphabetic':
+          return a.title.localeCompare(b.title);
+        case 'revAlphabetic':
+          return b.title.localeCompare(a.title);
+        case 'recent':
+          return new Date(b.updated).getTime() - new Date(a.updated).getTime();
+        case 'oldest':
+          return new Date(a.updated).getTime() - new Date(b.updated).getTime();
+        default:
+          return 0;
+      }
+    });
+  }
+);
 
 export const { setSortType } = podcastsSlice.actions;
 export default podcastsSlice.reducer;

@@ -4,14 +4,18 @@ import { createSlice } from "@reduxjs/toolkit";
 //fuse import for fuzzy search
 import Fuse from "fuse.js";
 
-interface SearchState{
-search: string
-selectedGenres:[number]
-filteredData [Podc]
+import { Podcast } from "./podcastsSlice";
+
+import { RootState as RootStateType } from "../store";
+
+interface SearchState {
+  search: string;
+  selectedGenres: number[];
+  filteredData: Podcast[];
 }
 
 // Initial state for search
-const initialState = {
+const initialState: SearchState = {
   search: "",
   selectedGenres: [],
   filteredData: [],
@@ -40,7 +44,7 @@ const searchSlice = createSlice({
 });
 
 // Function to filter podcasts by search term and genres
-const filterPodcasts = (data, search, selectedGenres) => {
+const filterPodcasts = (data:Podcast[], search: string , selectedGenres:number[]) => {
   const fuse = new Fuse(data, {
     keys: ["title", "description", "genres"],
     threshold: 0.3,
@@ -62,7 +66,7 @@ const filterPodcasts = (data, search, selectedGenres) => {
 };
 
 // Selector to get the filtered podcasts
-export const selectFilteredPodcasts = (state) => state.search.filteredData;
+export const selectFilteredPodcasts = (state : RootStateType ) => state.search.filteredData;
 
 export const { setSearch, setSelectedGenres } = searchSlice.actions;
 
