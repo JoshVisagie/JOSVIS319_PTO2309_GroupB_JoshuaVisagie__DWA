@@ -6,12 +6,12 @@ export const fetchPodcasts = createAsyncThunk('podcasts/fetch', async () => {
   return response.json();
 });
 
-// Initial state
+// Initial state for podcasts
 const initialState = {
   isLoading: false,
   data: [],
   error: false,
-  sortType: 'alphabetic', // Added sortType to manage sorting
+  sortType: 'recent',
 };
 
 const podcastsSlice = createSlice({
@@ -38,8 +38,6 @@ const podcastsSlice = createSlice({
   },
 });
 
-export const { setSortType } = podcastsSlice.actions;
-
 // Selector to get sorted podcasts based on the current sortType
 export const selectSortedPodcasts = (state) => {
   const { data, sortType } = state.podcasts;
@@ -59,5 +57,7 @@ export const selectSortedPodcasts = (state) => {
     }
   });
 };
+
+export const { setSortType } = podcastsSlice.actions;
 
 export default podcastsSlice.reducer;

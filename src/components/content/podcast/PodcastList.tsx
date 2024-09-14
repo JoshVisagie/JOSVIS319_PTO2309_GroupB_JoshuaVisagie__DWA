@@ -10,7 +10,7 @@ const PodcastList: React.FC = () => {
   const dispatch = useAppDispatch();
   const podcasts = useAppSelector(selectSortedPodcasts); 
   const isLoading = useAppSelector((state) => state.podcasts.isLoading);
-  const [sort, setSort] = useState('alphabetic');
+  const [sort, setSort] = useState('recent');
 
 
   const {
@@ -76,10 +76,10 @@ const PodcastList: React.FC = () => {
           },
         }}
       >
-        <MenuItem value="alphabetic">A - Z</MenuItem>
-        <MenuItem value="revAlphabetic">Z - A</MenuItem>
         <MenuItem value="recent">New - Old</MenuItem>
         <MenuItem value="oldest">Old - New</MenuItem>
+        <MenuItem value="alphabetic">A - Z</MenuItem>
+        <MenuItem value="revAlphabetic">Z - A</MenuItem>
       </Select>
       <Box
       sx={{

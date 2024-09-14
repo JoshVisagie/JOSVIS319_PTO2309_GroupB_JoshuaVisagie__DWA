@@ -41,6 +41,7 @@ const SinglePod: React.FC<SinglePodProps> = (props) => {
       onChange={() => props.handleCollapse(props.podcastID)} // Toggle expanded state when clicked.
       square={false}
       sx={{
+        backgroundColor:"#06AEFF",
         borderRadius: "15px",
         margin: "20px",
       }}
@@ -58,6 +59,7 @@ const SinglePod: React.FC<SinglePodProps> = (props) => {
           sx={{
             padding: "8px 16px",
             width: "100%",
+            color:"#FFFFFF"
           }}
         >
           <Grid item>

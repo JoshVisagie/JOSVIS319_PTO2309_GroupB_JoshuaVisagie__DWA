@@ -86,9 +86,11 @@ const PodInfo: React.FC<PodInfoProps> = ({ id }) => {
             labelId='season-select-label'
             value={selectedSeason}
             onChange={(event) =>
-              setSelectedSeason(event.target.value as number)
-            }
+              setSelectedSeason(event.target.value as number)}
             label='Select Season'
+            sx={{
+              color:"#ffffff"
+            }}
           >
             {/* Render a MenuItem for each season */}
             {seasons.map((season) => (

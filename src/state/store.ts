@@ -1,15 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
 import podcastsReducer from "./podcasts/podcastsSlice";
 import individualPodcastReducer from "./podcasts/individualPodcastSlice";
-import userReducer from "./userData/userDataSlice"
+import userReducer from "./userData/userDataSlice";
 import displayReducer from "./display/displaySlice";
+import searchReducer from "./podcasts/searchSlice";
 
 export const store = configureStore({
   reducer: {
     podcasts: podcastsReducer,
-    individualPodcast : individualPodcastReducer,
+    search: searchReducer,
+    individualPodcast: individualPodcastReducer,
     userData: userReducer,
-    display:displayReducer
+    display: displayReducer,
   },
 });
 
