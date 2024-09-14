@@ -1,3 +1,10 @@
+/**
+ * 
+ * This slice handles importing individual podcast data from an API
+ * 
+ * 
+ */
+
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { Podcast } from './podcastsSlice'

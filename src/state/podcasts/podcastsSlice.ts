@@ -1,3 +1,10 @@
+/**
+ * 
+ * This slice handles fetching podcasts from the API
+ * 
+ * 
+ */
+
 // Redux Toolkit imports
 import { createAsyncThunk, createSlice, createSelector, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";

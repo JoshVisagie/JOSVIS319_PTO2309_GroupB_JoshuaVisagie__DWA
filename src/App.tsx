@@ -1,4 +1,4 @@
-import GuideBar from "./components/ui/GuideBar";
+import GuideBar from "./components/ui/GuidBarComponents/GuideBar";
 import RecomendedCarousel from "./components/ui/Carousel";
 import Content from "./components/content/Content";
 function App() {

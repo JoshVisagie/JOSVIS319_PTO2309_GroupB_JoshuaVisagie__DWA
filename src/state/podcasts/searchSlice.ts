@@ -1,3 +1,10 @@
+/**
+ *
+ * This slice handles searching and applying Genre filters
+ *
+ *
+ */
+
 // Redux Toolkit imports
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
@@ -10,9 +17,9 @@ import { Podcast } from "./podcastsSlice";
 // Import the type of RootState for typing selectors
 import { RootState } from "../store";
 
-/** 
+/**
  * Interface for SearchState
- * 
+ *
  * @property {string} search - The current search term input by the user.
  * @property {number[]} selectedGenres - List of selected genres for filtering podcasts.
  * @property {Podcast[]} filteredData - The list of filtered podcasts based on search and genres.
@@ -32,7 +39,7 @@ const initialState: SearchState = {
 
 /**
  * Creates a slice for handling search and filtering of podcasts.
- * 
+ *
  * The slice includes:
  * - `setSearch`: Updates the search term and filters data based on it.
  * - `setSelectedGenres`: Updates the selected genres and filters data based on them.
@@ -44,11 +51,14 @@ const searchSlice = createSlice({
   reducers: {
     /**
      * Sets the search term and filters podcasts based on the search and selected genres.
-     * 
+     *
      * @param {SearchState} state - The current state of the search.
      * @param {PayloadAction<{ search: string; data: Podcast[] }>} action - Action containing the search term and podcast data.
      */
-    setSearch: (state: SearchState, action: PayloadAction<{ search: string; data: Podcast[] }>) => {
+    setSearch: (
+      state: SearchState,
+      action: PayloadAction<{ search: string; data: Podcast[] }>
+    ) => {
       const { search, data } = action.payload;
       state.search = search;
       state.filteredData = filterPodcasts(data, search, state.selectedGenres);
@@ -56,11 +66,14 @@ const searchSlice = createSlice({
 
     /**
      * Sets the selected genres and filters podcasts based on the genres and search term.
-     * 
+     *
      * @param {SearchState} state - The current state of the search.
      * @param {PayloadAction<{ genres: number[]; data: Podcast[] }>} action - Action containing selected genres and podcast data.
      */
-    setSelectedGenres: (state: SearchState, action: PayloadAction<{ genres: number[]; data: Podcast[] }>) => {
+    setSelectedGenres: (
+      state: SearchState,
+      action: PayloadAction<{ genres: number[]; data: Podcast[] }>
+    ) => {
       const { genres, data } = action.payload;
       state.selectedGenres = Array.isArray(genres) ? genres : [];
       state.filteredData = filterPodcasts(data, state.search, genres);
@@ -70,11 +83,11 @@ const searchSlice = createSlice({
 
 /**
  * Filters podcasts based on the search term and selected genres using Fuse.js.
- * 
+ *
  * @param {Podcast[]} data - The list of podcasts to filter.
  * @param {string} search - The search term for filtering.
  * @param {number[]} selectedGenres - The selected genres for filtering.
- * 
+ *
  * @returns {Podcast[]} - The filtered list of podcasts.
  */
 const filterPodcasts = (
@@ -104,11 +117,12 @@ const filterPodcasts = (
 
 /**
  * Selector to get the filtered podcasts based on search term and selected genres.
- * 
+ *
  * @param {RootState} state - The entire Redux state.
  * @returns {Podcast[]} - The list of filtered podcasts.
  */
-export const selectFilteredPodcasts = (state: RootState): Podcast[] => state.search.filteredData;
+export const selectFilteredPodcasts = (state: RootState): Podcast[] =>
+  state.search.filteredData;
 
 export const { setSearch, setSelectedGenres } = searchSlice.actions;
 
