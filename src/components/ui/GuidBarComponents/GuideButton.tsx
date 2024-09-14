@@ -1,8 +1,13 @@
+//mui component imports
 import Button from "@mui/material/Button";
-import currentTheme from "../../../style";
+//redux toolkit imports
 import { useAppDispatch, useAppSelector } from "../../../reduxHooks";
 import { togglePage } from "../../../state/display/displaySlice";
+
+//component imports
 import SearchButton from "./SearchButton";
+//styling imports
+import currentTheme from "../../../style";
 
 /** Props interface for GuideButton component */
 interface GuideButtonProps {

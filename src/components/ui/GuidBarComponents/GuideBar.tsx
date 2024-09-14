@@ -1,5 +1,7 @@
+//mui imports
 import { Box } from "@mui/material";
 import { Search, Home, Favorite, Settings, Portrait } from "@mui/icons-material";
+//component imports
 import GuideButton from "./GuideButton";
 
 /**

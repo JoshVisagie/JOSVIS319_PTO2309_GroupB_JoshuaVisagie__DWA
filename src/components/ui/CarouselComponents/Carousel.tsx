@@ -1,7 +1,8 @@
+//carousel component import
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 
-
+//component import
 import CarouselCard from "./CarouselCard";
 
 

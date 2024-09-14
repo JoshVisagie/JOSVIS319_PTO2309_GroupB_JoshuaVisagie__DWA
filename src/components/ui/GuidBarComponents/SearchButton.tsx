@@ -1,4 +1,6 @@
+//mui component imports
 import Input from '@mui/joy/Input';
+//redux toolkit imports
 import { useAppDispatch, useAppSelector } from "../../../reduxHooks";
 import { setSearch } from "../../../state/podcasts/searchSlice";
 
@@ -24,6 +26,7 @@ export default function SearchButton(): JSX.Element {
       onChange={handleChange}
       value={searchValue}
       placeholder="Search Pods"
+      id='guideBarSearch'
       sx={{ width: 200, borderRadius: 12 }}
     />
   );

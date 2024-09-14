@@ -19,7 +19,7 @@ import PodInfo from "./PodInfo";
 interface SinglePodProps {
   podcastTitle: string; // Title of the podcast
   podcastID: string; // Unique identifier for the podcast
-  podcastGenres: string[]; // Array of genres the podcast belongs to
+  podcastGenres: number[]; // Array of genres the podcast belongs to
   podcastSeasons: number; // Number of seasons in the podcast
   podcastImg: string; // URL of the podcast image
   podcastDate: string; // Date when the podcast was last updated

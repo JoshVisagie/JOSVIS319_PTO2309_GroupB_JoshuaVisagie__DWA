@@ -96,7 +96,7 @@ const filterPodcasts = (
   selectedGenres: number[]
 ): Podcast[] => {
   const fuse = new Fuse(data, {
-    keys: ["title", "description", "genres"],
+    keys: ["title"],
     threshold: 0.3,
   });
 

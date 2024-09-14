@@ -1,8 +1,12 @@
+//carousel component import
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+//mui import
 import { Card } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+//redux toolkit imports
 import { useAppSelector } from "../../../reduxHooks";
+//react imports
 import { useEffect, useState } from "react";
 
 
