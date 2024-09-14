@@ -1,5 +1,5 @@
 import GuideBar from "./components/ui/GuidBarComponents/GuideBar";
-import RecomendedCarousel from "./components/ui/Carousel";
+import RecomendedCarousel from "./components/ui/CarouselComponents/Carousel";
 import Content from "./components/content/Content";
 function App() {
   return (

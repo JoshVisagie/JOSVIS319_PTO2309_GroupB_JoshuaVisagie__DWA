@@ -1,18 +1,19 @@
 import { Box } from "@mui/material";
-import {
-  Search,
-  Home,
-  Favorite,
-  Settings,
-  Portrait,
-} from "@mui/icons-material";
-
+import { Search, Home, Favorite, Settings, Portrait } from "@mui/icons-material";
 import GuideButton from "./GuideButton";
 
-export default function GuideBar() {
+/**
+ * A guide bar for navigating between different sections of the app.
+ *
+ * @component
+ * @returns {JSX.Element} The guide bar containing navigation buttons.
+ */
+export default function GuideBar(): JSX.Element {
   return (
     <Box
       sx={{
+        display: "flex",
+        justifyContent: "space-around",
         position: "sticky",
         top: 0,
         zIndex: 1000,

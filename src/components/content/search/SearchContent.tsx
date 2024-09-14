@@ -3,7 +3,7 @@ import Genres from "./Genres";
 const SearchContent = () => {
   return (
     <div>
-          <Genres />
+        <Genres />
 
     </div>
   );

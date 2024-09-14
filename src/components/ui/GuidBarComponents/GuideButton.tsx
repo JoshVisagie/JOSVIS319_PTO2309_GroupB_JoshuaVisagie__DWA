@@ -2,25 +2,43 @@ import Button from "@mui/material/Button";
 import currentTheme from "../../../style";
 import { useAppDispatch, useAppSelector } from "../../../reduxHooks";
 import { togglePage } from "../../../state/display/displaySlice";
-import SearchButton from "../../content/search/SearchButton";
+import SearchButton from "./SearchButton";
+
+/** Props interface for GuideButton component */
+interface GuideButtonProps {
+  buttonValue: string;
+  buttonLabel: string;
+  icon: React.ReactNode;
+}
 
 // Destructure theme colors
 const {
   primary: primaryColor,
   secondary: secondaryColor,
-  text: textColor,
 } = currentTheme;
 
-const GuideButton = ({ buttonValue, buttonLabel, icon }) => {
+/**
+ * A navigation button used for switching pages in the app.
+ *
+ * @param {GuideButtonProps} props - Contains the button's value, label, and icon.
+ * @returns {JSX.Element} A stylized button for guiding users between pages.
+ */
+const GuideButton = ({
+  buttonValue,
+  buttonLabel,
+  icon,
+}: GuideButtonProps): JSX.Element => {
   const dispatch = useAppDispatch();
   const currentPage = useAppSelector((state) => state.display.page);
 
+  /** Handle button click to toggle the active page */
   const handleExpand = () => {
     if (currentPage !== buttonValue) {
       dispatch(togglePage(buttonValue));
     }
   };
 
+  /** Conditionally render content based on the button's value */
   const renderContent = () => {
     switch (buttonValue) {
       case "search":
@@ -37,21 +55,19 @@ const GuideButton = ({ buttonValue, buttonLabel, icon }) => {
       onClick={handleExpand}
       sx={{
         borderRadius: "15px",
-        backgroundColor: primaryColor,
-        color: secondaryColor,
-        "&.Mui-selected": {
-          backgroundColor: secondaryColor,
-          color: textColor,
-          scale: 1.3,
-          boxShadow: 3,
-          transition: "all 0.3s ease",
-        },
+        color: buttonValue === currentPage ? secondaryColor : primaryColor,
+        backgroundColor: buttonValue === currentPage ? primaryColor : secondaryColor,
+        scale: buttonValue === currentPage ? 1.1 : 0.8,
+        margin: buttonValue === currentPage ? "7px" : "5px",
+        boxShadow: buttonValue === currentPage ? 2 : 1,
+        transition: "all 0.3s ease",
+
         "&:hover": {
           backgroundColor: primaryColor,
+          color: secondaryColor,
           scale: 1.1,
-          opacity: 0.9,
+          opacity: 0.8,
           boxShadow: 1,
-          transition: "all 0.3s ease",
         },
       }}
     >

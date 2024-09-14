@@ -1,11 +1,10 @@
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Carousel } from "react-responsive-carousel";
 import { Card } from "@mui/material";
 import Typography from "@mui/material/Typography";
 
 import Box from "@mui/material/Box";
 
-import { useAppSelector } from "../../reduxHooks";
+import { useAppSelector } from "../../../reduxHooks";
 import { useEffect, useState } from "react";
 
 const CarouselCard = () => {
@@ -89,17 +88,4 @@ const CarouselCard = () => {
   );
 };
 
-const RecomendedCarousel = () => {
-  return (
-    <Carousel emulateTouch={true} infiniteLoop={true} showThumbs={false}>
-      <CarouselCard />
-      <CarouselCard />
-      <CarouselCard />
-      <CarouselCard />
-      <CarouselCard />
-      <CarouselCard />
-    </Carousel>
-  );
-};
-
-export default RecomendedCarousel;
+export default CarouselCard
