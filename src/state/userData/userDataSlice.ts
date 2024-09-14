@@ -1,12 +1,31 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-// TODO Define the User interface based on your actual user data structure
+//User interface
+interface User {
+  id: string;
+  aud: string;
+  role: string;
+  email: string;
+  email_confirmed_at: string;
+  phone: string;
+  confirmation_sent_at: string;
+  confirmed_at: string;
+  last_sign_in_at: string;
+  created_at: string;
+  updated_at: string;
+  is_anonymous: boolean;
+  app_metadata?: object;
+  user_metadata?: object;
+  identities?: object[];
+}
 
-
-// TODO Define the UserState interface
-
+// UserState interface
+interface UserState {
+  loggedIn: boolean;
+  user: User | null;
+}
 // Initial state for the user slice
-const initialState = {
+const initialState : UserState= {
   loggedIn: false,
   user: null,
 };
@@ -16,9 +35,10 @@ const userSlice = createSlice({
   name: 'userData',
   initialState,
   reducers: {
+
     // Action to log in and set user data
     logIn(state, action) {
-      state.user = action.payload; // Sets user data into state
+      state.user= action.payload; 
       state.loggedIn = true;
     },
     
@@ -29,6 +49,7 @@ const userSlice = createSlice({
     },
   },
 });
+
 
 export const { logIn, logOut } = userSlice.actions;
 

@@ -1,10 +1,14 @@
+//import configure store from redux toolkit
 import { configureStore } from "@reduxjs/toolkit";
+
+//import slices
 import podcastsReducer from "./podcasts/podcastsSlice";
 import individualPodcastReducer from "./podcasts/individualPodcastSlice";
 import userReducer from "./userData/userDataSlice";
 import displayReducer from "./display/displaySlice";
 import searchReducer from "./podcasts/searchSlice";
 
+//Global store
 export const store = configureStore({
   reducer: {
     podcasts: podcastsReducer,
@@ -15,6 +19,6 @@ export const store = configureStore({
   },
 });
 
+//export RootState and App Dispatch types
 export type RootState = ReturnType<typeof store.getState>;
-
 export type AppDispatch = typeof store.dispatch;
