@@ -1,16 +1,25 @@
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Card } from "@mui/material";
 import Typography from "@mui/material/Typography";
-
 import Box from "@mui/material/Box";
-
 import { useAppSelector } from "../../../reduxHooks";
 import { useEffect, useState } from "react";
 
-const CarouselCard = () => {
+
+/**
+ * CarouselCard component displays a random podcast's image and title.
+ *
+ * @component
+ * @returns {JSX.Element} A card component that displays a podcast's image and title.
+ */
+const CarouselCard = (): JSX.Element => {
+  /** Podcast data from the Redux store */
   const podcasts = useAppSelector((state) => state.podcasts.data);
+
+  /** Randomly selected podcast index */
   const [randomPod, setRandomPod] = useState<number | null>(null);
 
+  /** Set a random podcast index when podcasts are available */
   useEffect(() => {
     if (podcasts.length > 0) {
       const randomIndex = Math.floor(podcasts.length * Math.random());
@@ -18,8 +27,10 @@ const CarouselCard = () => {
     }
   }, [podcasts]);
 
+  /** Currently selected podcast */
   const currentPodcast = podcasts[randomPod ?? 0];
 
+  /** Image URL and title of the selected podcast */
   const imageUrl = currentPodcast?.image ?? "";
   const title = currentPodcast?.title ?? "Unknown Title";
 
@@ -34,6 +45,7 @@ const CarouselCard = () => {
         borderRadius: 2,
       }}
     >
+      {/* Blurred background image */}
       <Box
         sx={{
           position: "absolute",
@@ -47,7 +59,7 @@ const CarouselCard = () => {
       >
         <img
           src={imageUrl}
-          alt='background'
+          alt="background"
           style={{
             width: "100%",
             height: "100%",
@@ -55,6 +67,8 @@ const CarouselCard = () => {
           }}
         />
       </Box>
+
+      {/* Foreground image and podcast title */}
       <Box
         sx={{
           position: "relative",
@@ -65,7 +79,7 @@ const CarouselCard = () => {
       >
         <img
           src={imageUrl}
-          alt='foreground'
+          alt="foreground"
           style={{
             maxHeight: "140px",
             padding: "10px",
@@ -74,11 +88,11 @@ const CarouselCard = () => {
           }}
         />
         <Typography
-          variant='h4'
+          variant="h4"
           sx={{
             color: "white",
             fontWeight: "bold",
-            overflowy: "scroll",
+            overflowY: "scroll",
           }}
         >
           {title}
@@ -88,4 +102,4 @@ const CarouselCard = () => {
   );
 };
 
-export default CarouselCard
+export default CarouselCard;
