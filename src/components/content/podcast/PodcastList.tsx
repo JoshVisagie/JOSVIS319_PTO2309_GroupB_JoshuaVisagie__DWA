@@ -16,8 +16,6 @@ const PodcastList: React.FC = () => {
   const {
     primary: primaryColor,
     secondary: secondaryColor,
-    background: backgroundColor,
-    text: textColor,
   } = currentTheme;
 
   // Fetch podcasts when the component mounts

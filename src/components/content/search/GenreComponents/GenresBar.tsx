@@ -1,5 +1,6 @@
+//import MUI components
 import Box from "@mui/material/Box";
-
+//Import MUI Icons
 import {
   School,
   Gavel,
@@ -12,9 +13,12 @@ import {
   FamilyRestroom,
 } from "@mui/icons-material/";
 
-
+//Import Component
 import GenreButton from "./GenreButtons";
-
+/**
+ * A component for users to Select what genre filters they wish to add
+ *  @returns {JSX.Element} A bar of toggleable buttons containing the different genres.
+ */
 export default function GenreBar() {
   return (
     <Box
