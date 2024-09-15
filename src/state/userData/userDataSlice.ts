@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 //User interface
-interface User {
+export interface User {
   id: string;
   aud: string;
   role: string;

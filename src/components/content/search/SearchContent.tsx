@@ -1,11 +1,10 @@
-import Genres from "./Genres";
+import GenreBar from "./GenreComponents/GenresBar";
 import FilteredPodcastList from "./FilteredPodCastList";
 const SearchContent = () => {
   return (
     <div>
-        <Genres />
-        <FilteredPodcastList/>
-
+      <GenreBar />
+      <FilteredPodcastList />
     </div>
   );
 };

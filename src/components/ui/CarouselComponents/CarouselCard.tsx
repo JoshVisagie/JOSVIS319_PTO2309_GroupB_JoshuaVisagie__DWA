@@ -9,14 +9,14 @@ import { useAppSelector } from "../../../reduxHooks";
 //react imports
 import { useEffect, useState } from "react";
 
-
 /**
  * CarouselCard component displays a random podcast's image and title.
  *
  * @component
  * @returns {JSX.Element} A card component that displays a podcast's image and title.
  */
-const CarouselCard = (): JSX.Element => {
+
+const CarouselCard = (props: { cardColor: string }): JSX.Element => {
   /** Podcast data from the Redux store */
   const podcasts = useAppSelector((state) => state.podcasts.data);
 
@@ -49,7 +49,6 @@ const CarouselCard = (): JSX.Element => {
         borderRadius: 2,
       }}
     >
-      {/* Blurred background image */}
       <Box
         sx={{
           position: "absolute",
@@ -57,20 +56,10 @@ const CarouselCard = (): JSX.Element => {
           left: 0,
           width: "100%",
           height: "100%",
-          filter: "blur(50px)",
           zIndex: 1,
+          backgroundColor: props.cardColor,
         }}
-      >
-        <img
-          src={imageUrl}
-          alt="background"
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-          }}
-        />
-      </Box>
+      ></Box>
 
       {/* Foreground image and podcast title */}
       <Box
@@ -81,18 +70,20 @@ const CarouselCard = (): JSX.Element => {
           zIndex: 2,
         }}
       >
-        <img
-          src={imageUrl}
-          alt="foreground"
-          style={{
-            maxHeight: "140px",
-            padding: "10px",
-            maxWidth: "140px",
-            borderRadius: "22px",
-          }}
-        />
+        <Box sx={{ backgroundColor: "#FFFFFF", boxShadow: 4 }}>
+          <img
+            src={imageUrl}
+            alt='foreground'
+            style={{
+              maxHeight: "140px",
+              padding: "10px",
+              maxWidth: "140px",
+              borderRadius: "22px",
+            }}
+          />
+        </Box>
         <Typography
-          variant="h4"
+          variant='h4'
           sx={{
             color: "white",
             fontWeight: "bold",
