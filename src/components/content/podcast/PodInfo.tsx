@@ -12,6 +12,7 @@ import {
   FormControl,
   InputLabel,
   CircularProgress,
+  Button,
 } from "@mui/material";
 import Stack from "@mui/joy/Stack";
 
@@ -29,21 +30,7 @@ interface Episode {
   file: string; // URL for the audio file of the episode
 }
 
-/**
- * Interface representing a single season
- */
-interface Season {
-  season: number; // Season number
-  episodes: Episode[]; // List of episodes in the season
-}
 
-/**
- * Interface for the individual podcast data
- */
-interface PodcastData {
-  description: string; // Description of the podcast
-  seasons: Season[]; // Array of seasons with episodes
-}
 
 /**
  * Interface for PodInfo component props
@@ -55,12 +42,15 @@ interface PodInfoProps {
 /**
  * PodInfo component handles displaying detailed information for an individual podcast,
  * including its description and a list of episodes grouped by season.
+ * 
  */
-const PodInfo: React.FC<PodInfoProps> = ({ id }) => {
+const PodInfo: React.FC<PodInfoProps> = (props) => {
   const dispatch = useAppDispatch();
   const data = useAppSelector((state) => state.individualPodcast);
-  const [selectedSeason, setSelectedSeason] = useState<number | "">(""); // State to manage the selected season.
-
+   // State to manage the selected season.
+  const [selectedSeason, setSelectedSeason] = useState<number | "">("");
+  const [showDescription, setShowDescription] = useState(false)
+  const id = props.id
   // Fetch individual podcast data based on the provided id whenever the id changes.
   useEffect(() => {
     dispatch(fetchIndivdualPodcast(id));
@@ -75,10 +65,14 @@ const PodInfo: React.FC<PodInfoProps> = ({ id }) => {
   }
 
   // Destructure description and seasons from the podcast data.
-  const { description, seasons } = podcastData as PodcastData;
+  const { description, seasons } = podcastData ;
 
+  const handleShowDescription=()=>{
+    setShowDescription(currentShowing=>!currentShowing)
+  }
   return (
     <div>
+      {showDescription?<h5 onClick={handleShowDescription}>{description}</h5>:<Button onClick={handleShowDescription}>show description</Button>}
       <div>
         <FormControl fullWidth>
           <InputLabel id='season-select-label'>Select Season</InputLabel>
@@ -106,7 +100,7 @@ const PodInfo: React.FC<PodInfoProps> = ({ id }) => {
         <Stack spacing={1} direction='row' useFlexGap sx={{ flexWrap: "wrap" }}>
           {seasons
             .find((season) => season.season === selectedSeason)
-            ?.episodes.map((episode) => (
+            ?.episodes.map((episode:Episode) => (
               <EpisodeCard
                 key={episode.episode}
                 episode={episode}

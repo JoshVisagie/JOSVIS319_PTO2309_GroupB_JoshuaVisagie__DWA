@@ -1,10 +1,13 @@
+//react imports
 import React, { useState } from "react";
+//MUI imports
 import IconButton from "@mui/material/IconButton";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import Grid from "@mui/joy/Grid";
+import ReactPlayer from "react-player";
 
 // Props interface for EpisodeCard
 interface EpisodeCardProps {
@@ -19,7 +22,13 @@ interface Episode {
   episode: number;
   file: string;
 }
-
+/**
+ * A component for A single Episodes card
+ * This will allow each episode to be played, liked and description shown
+ * 
+ * @param {Episode} episode episode to generate the episode card
+ * @returns {React.FC}
+ */
 const EpisodeCard: React.FC<EpisodeCardProps> = ({ episode }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLiked, setIsLiked] = useState(false);

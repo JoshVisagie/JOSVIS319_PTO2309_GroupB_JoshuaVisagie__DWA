@@ -38,8 +38,13 @@ const CarouselCard = (props: { cardColor: string }): JSX.Element => {
   const imageUrl = currentPodcast?.image ?? "";
   const title = currentPodcast?.title ?? "Unknown Title";
 
+    //TODO add functionality to navigate to a podcast from here
+  const handleClick=()=>{
+    console.log(currentPodcast.title)
+  }
   return (
     <Card
+    onClick = {handleClick}
       sx={{
         position: "relative",
         width: "100%",
@@ -50,6 +55,8 @@ const CarouselCard = (props: { cardColor: string }): JSX.Element => {
       }}
     >
       <Box
+         
+
         sx={{
           position: "absolute",
           top: 0,

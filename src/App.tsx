@@ -1,12 +1,14 @@
 import GuideBar from "./components/ui/GuidBarComponents/GuideBar";
 import RecomendedCarousel from "./components/ui/CarouselComponents/Carousel";
 import Content from "./components/content/Content";
+import BottomAppBar from "./components/ui/PlayBarComponents/PlayBar";
 function App() {
   return (
     <div>
       <RecomendedCarousel />
       <GuideBar />
       <Content />
+      <BottomAppBar/>
     </div>
   );
 }

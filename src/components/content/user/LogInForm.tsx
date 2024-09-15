@@ -9,7 +9,7 @@ import { useAppSelector } from "../../../reduxHooks";
 //User Type import 
 import { User as UserType } from "../../../state/userData/userDataSlice";
 // imports the supabase client to avoid constant rerendering 
-import { supabase } from "./supabaseClient";
+import { supabase } from "../../../supabaseClient";
 //interface of AuthFormProps
 interface AuthFormProps{
   isSignUp?: boolean; // Determines if the form is for sign-up or login

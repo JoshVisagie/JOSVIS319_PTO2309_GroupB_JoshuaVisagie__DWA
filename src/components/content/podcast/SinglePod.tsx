@@ -1,13 +1,10 @@
 // react imports
 
-
 // mui imports
 import Accordion from "@mui/material/Accordion";
-import AccordionActions from "@mui/material/AccordionActions";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Button from "@mui/material/Button";
 import { Grid } from "@mui/joy";
 
 // PodInfo component import
@@ -41,7 +38,7 @@ const SinglePod: React.FC<SinglePodProps> = (props) => {
       onChange={() => props.handleCollapse(props.podcastID)} // Toggle expanded state when clicked.
       square={false}
       sx={{
-        backgroundColor:"#06AEFF",
+        backgroundColor: "#06AEFF",
         borderRadius: "15px",
         margin: "20px",
       }}
@@ -59,10 +56,10 @@ const SinglePod: React.FC<SinglePodProps> = (props) => {
           sx={{
             padding: "8px 16px",
             width: "100%",
-            color:"#FFFFFF"
+            color: "#FFFFFF",
           }}
         >
-          <Grid >
+          <Grid>
             <img
               className='accordian--logo'
               src={props.podcastImg}
@@ -83,13 +80,8 @@ const SinglePod: React.FC<SinglePodProps> = (props) => {
         {/* Display detailed information of the podcast when expanded */}
         {props.expanded && <PodInfo id={props.podcastID} />}
       </AccordionDetails>
-      <AccordionActions>
-        {/* Buttons for additional actions, e.g., Cancel and Agree */}
-        <Button>Cancel</Button>
-        <Button>Agree</Button>
-      </AccordionActions>
     </Accordion>
   );
 };
 
-export default SinglePod
+export default SinglePod;

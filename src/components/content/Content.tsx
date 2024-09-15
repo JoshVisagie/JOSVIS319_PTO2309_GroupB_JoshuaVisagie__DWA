@@ -5,6 +5,7 @@ import { useAppSelector } from "../../reduxHooks";
 import PodcastList from "./podcast/PodcastList";
 import LogInForm from "./user/LogInForm";
 import SearchContent from "./search/SearchContent";
+import SupabaseTest from "../SupabaseTest";
 
 /**
  * A component for handling what will be shown on the page depending on what the state is
@@ -20,6 +21,7 @@ const Content = () => {
       {nav == "user" && <LogInForm />}
       {nav == "home" && <PodcastList />}
       {nav == "search" && <SearchContent />}
+      {nav== "liked" &&<SupabaseTest/>}
     </div>
   );
 };

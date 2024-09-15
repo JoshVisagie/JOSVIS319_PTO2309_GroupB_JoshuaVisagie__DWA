@@ -40,13 +40,16 @@ export interface Podcast {
   updated: string;
 }
 
+export interface SortType{
+sortType : "recent" | "alphabetic" | "revAlphabetic" | "oldest"
+}
 /**
  * Interface for the state of the podcasts slice.
  * 
  * @property {boolean} isLoading - Whether the podcasts are currently being loaded.
  * @property {Podcast[]} data - The list of fetched podcasts.
  * @property {boolean} error - Whether there was an error during the fetching process.
- * @property {"recent" | "alphabetic" | "revAlphabetic" | "oldest"} sortType - The current sort type for the podcasts.
+ * @property {SortType} sortType - The current sort type for the podcasts.
  */
 interface PodcastsState {
   isLoading: boolean;
