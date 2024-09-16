@@ -1,58 +1,42 @@
-import { supabase } from "../supabaseClient"
-import { useState, useEffect } from "react"
-import { useAppSelector } from "../reduxHooks"
+import { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../reduxHooks'; // Assuming you have these hooks set up
+import { fetchUserData } from '../state/userData/userDataPodcasts';
 
-const SupabaseTest =()=> {
-    const [posts,setPosts] = useState([])
-    const [post,setPost] = useState({title:'', content:""})
-    const {title, content} = post
-    const id = useAppSelector(state=> state.userData.user?.id)   
-    
-    useEffect(()=>{
-        fetchPosts()
-    },[])
+const MyPodcastComponent = () => {
+  const dispatch = useAppDispatch();
 
-    async function createPost() {
-        await supabase
-        .from('posts')
-        .insert([
-            {title, content}            
-        ])
-        .single()
-        setPost({title:"", content:""})
-        fetchPosts()
-        
-    }
+  // Fetch the user data from the Redux store
+  const userData = useAppSelector((state) => state.podcastUserData);
+    const email = useAppSelector((state)=>state.userData.user?.email)
+  // Call the fetchUserData thunk when the component is mounted
+  useEffect(() => {
+    // Dispatch fetchUserData action here
+    console.log("Dispatching fetchUserData");
+    dispatch(fetchUserData(email)); 
+  }, [dispatch]);
 
-    async function fetchPosts() {
-        const{data} =await supabase.from('posts').select()
-        setPosts(data)
-        console.log(data)
-    }
-    return(
-        <div>
-            <input 
-            placeholder="title"
-            value={title}
-            onChange={e=>setPost({...post, title: e.target.value})}
-            />
-             <input 
-            placeholder="content"
-            value={content}
-            onChange={e=>setPost({...post, content: e.target.value})}
-            />
-            <button onClick={createPost}>Create Post</button>
+  // Render your component based on the state
+  if (userData.loading) {
+    return <p>Loading...</p>;
+  }
 
-            {
-                posts.map(post=>(
-                    <div key={post.id}>
-                        <h3>{post.title}</h3>
-                        <p>{post.content}</p>
-                    </div>
-                ))
-            }
-        </div>
-    )
-}
+  if (userData.error) {
+    return <p>Error loading user data: {userData.error}</p>;
+  }
 
-export default SupabaseTest
+  return (
+    <div>
+      <h1>Podcast Data</h1>
+      {/* Render the podcast data */}
+      {userData.userData && (
+        <ul>
+          <li>Last Listened: {userData.userData.last_listen}</li>
+          <li>Liked Podcasts: {userData.userData.liked.join(', ')}</li>
+          {/* Render other data as needed */}
+        </ul>
+      )}
+    </div>
+  );
+};
+
+export default MyPodcastComponent;
