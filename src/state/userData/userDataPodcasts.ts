@@ -23,10 +23,10 @@ export const fetchUserData = createAsyncThunk(
 // Async action to update liked podcasts
 export const updateLikedPodcasts = createAsyncThunk(
     'UserData/updateLikedPodcasts',
-    async ({ userEmail, liked }: { userEmail: string; liked: string[] }) => {
+    async ({ userEmail, liked }: { userEmail: string |null ; liked: string[] }) => {
       const { data, error } = await supabase
         .from('user_podcast_data')
-        .upsert({ email: userEmail, liked })
+        .update({ liked: liked })
         .eq('email', userEmail); 
       if (error) throw new Error(error.message);
       return liked;
@@ -39,7 +39,7 @@ export const updateLikedPodcasts = createAsyncThunk(
     async ({ userEmail, last_listen }: { userEmail: string; last_listen: string }) => {
       const { data, error } = await supabase
         .from('user_podcast_data')
-        .upsert({ email: userEmail, last_listen })
+        .update({ last_listen: last_listen })
         .eq('email', userEmail); 
   
       if (error) throw new Error(error.message);

@@ -11,6 +11,9 @@ import Grid from "@mui/joy/Grid";
 import { useAppSelector, useAppDispatch } from "../../../reduxHooks";
 import { playPause, setMedia } from "../../../state/mediaPlayer/mediaSlice";
 
+import { updateLikedPodcasts } from "../../../state/userData/userDataPodcasts";
+import { supabase } from "../../../supabaseClient";
+
 // Props interface for EpisodeCard
 interface EpisodeCardProps {
   episode: Episode; // Single episode object passed as prop
@@ -42,8 +45,8 @@ const EpisodeCard: React.FC<EpisodeCardProps> = (props) => {
   const media = useAppSelector(state=>state.media)
   const isMediaPlaying = useAppSelector(state=> state.media.playing)
   const dispatch = useAppDispatch()
-
-
+  const email = useAppSelector(state=> state.userData.user?.email)
+  const liked = useAppSelector(state=>state.podcastUserData.userData?.liked)
   // Handles play and pause functionality
   const handlePlayPause = () => {
     
@@ -70,8 +73,14 @@ const EpisodeCard: React.FC<EpisodeCardProps> = (props) => {
   // Handles like/unlike functionality
   const handleLike = () => {
     setIsLiked(!isLiked);
+    if (email) {
+      const time = new Date().getTime()
+      dispatch(updateLikedPodcasts({
+        userEmail: email,
+        liked: [...(liked || []), `${id}#${time}`] // Append the episode ID to the liked list
+      }));
   };
-
+  }
   return (
     <Grid
       container
