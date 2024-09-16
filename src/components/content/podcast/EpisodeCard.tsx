@@ -1,5 +1,5 @@
 //react imports
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 //MUI imports
 import IconButton from "@mui/material/IconButton";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
@@ -7,11 +7,16 @@ import PauseIcon from "@mui/icons-material/Pause";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import Grid from "@mui/joy/Grid";
-import ReactPlayer from "react-player";
+
+import { useAppSelector, useAppDispatch } from "../../../reduxHooks";
+import { playPause, setMedia } from "../../../state/mediaPlayer/mediaSlice";
 
 // Props interface for EpisodeCard
 interface EpisodeCardProps {
   episode: Episode; // Single episode object passed as prop
+  id: string
+  podcastTitle:string
+  podcastImage: string
 }
 
 // Props interface for Episode
@@ -21,6 +26,7 @@ interface Episode {
   description: string;
   episode: number;
   file: string;
+  podcastImage:string;
 }
 /**
  * A component for A single Episodes card
@@ -29,22 +35,37 @@ interface Episode {
  * @param {Episode} episode episode to generate the episode card
  * @returns {React.FC}
  */
-const EpisodeCard: React.FC<EpisodeCardProps> = ({ episode }) => {
-  const [isPlaying, setIsPlaying] = useState(false);
+const EpisodeCard: React.FC<EpisodeCardProps> = (props) => {
+  const {id, podcastTitle, episode, podcastImage} =props  
   const [isLiked, setIsLiked] = useState(false);
   const audioRef = React.useRef<HTMLAudioElement>(null);
+  const media = useAppSelector(state=>state.media)
+  const isMediaPlaying = useAppSelector(state=> state.media.playing)
+  const dispatch = useAppDispatch()
+
 
   // Handles play and pause functionality
   const handlePlayPause = () => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
+    
+      if (media.id!== id) {
+        console.log(episode.file, id)
+        const newMedia={
+          id:id,
+          url: episode.file,
+          episodeTitle: episode.title,
+          podcastTitle: podcastTitle,
+          podcastImage: podcastImage,
+        }
+
+        dispatch(setMedia(newMedia))
+        dispatch(playPause(!isMediaPlaying))
+
       } else {
-        audioRef.current.play();
-      }
-      setIsPlaying(!isPlaying);
-    }
+        dispatch(playPause(!isMediaPlaying))
+      }    
   };
+
+  
 
   // Handles like/unlike functionality
   const handleLike = () => {
@@ -72,7 +93,7 @@ const EpisodeCard: React.FC<EpisodeCardProps> = ({ episode }) => {
         <audio ref={audioRef} src={episode.file} />
         {/* Play/Pause Button */}
         <IconButton onClick={handlePlayPause}>
-          {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
+          {(isMediaPlaying && media.id === id) ? <PauseIcon /> : <PlayArrowIcon />}
         </IconButton>
 
         {/* Like Button */}

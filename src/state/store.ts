@@ -7,6 +7,7 @@ import individualPodcastReducer from "./podcasts/individualPodcastSlice";
 import userReducer from "./userData/userDataSlice";
 import displayReducer from "./display/displaySlice";
 import searchReducer from "./podcasts/searchSlice";
+import mediaSlice from "./mediaPlayer/mediaSlice";
 
 //Global store
 export const store = configureStore({
@@ -16,6 +17,8 @@ export const store = configureStore({
     individualPodcast: individualPodcastReducer,
     userData: userReducer,
     display: displayReducer,
+    media:mediaSlice
+
   },
 });
 

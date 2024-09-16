@@ -103,6 +103,9 @@ const PodInfo: React.FC<PodInfoProps> = (props) => {
             ?.episodes.map((episode:Episode) => (
               <EpisodeCard
                 key={episode.episode}
+                podcastTitle={data.data?.title}
+                podcastImage={data.data?.image}
+                id={`${id}-${selectedSeason}-${episode.episode}`}
                 episode={episode}
               ></EpisodeCard>
             ))}
