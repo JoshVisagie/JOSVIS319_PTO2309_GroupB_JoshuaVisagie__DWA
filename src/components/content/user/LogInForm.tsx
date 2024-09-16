@@ -1,5 +1,5 @@
 //React imports
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 //MUI imports
 import { Box, Button, TextField, Typography, Container } from "@mui/material";
 //Redux Imports
@@ -17,22 +17,6 @@ interface AuthFormProps{
 
 
 
-/**
- * A function for retrieving the user from Supabase Auth
- *
- * @returns {UserType | null} returns a User Object or null if no one is logged In.
- */
-const getSupabaseUser = async () => {
-  try {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    return user;
-  } catch (error) {
-    console.error("Error fetching user:", error);
-    return null;
-  }
-};
 
 /**
  * A component allowing users to Log In | Sign Up | Sign out
@@ -52,25 +36,6 @@ const AuthForm: React.FC<AuthFormProps> = () => {
   const user: UserType|null = useAppSelector((state) => state.userData.user);
   const loggedIn = useAppSelector((state) => state.userData.loggedIn);
 
-  /**
- * An Effect to see if a user has already logged in 
- * 
- */
-  useEffect(() => {
-    // Define an async function to handle fetching and dispatching
-    
-    const fetchUser = async () => {
-      if(!loggedIn){
-        
-      const AlreadyLoggedInUser = await getSupabaseUser();
-      // Dispatch if there is a logged-in user
-      if (AlreadyLoggedInUser) {
-        dispatch(logIn(AlreadyLoggedInUser));
-      }
-    };
-  }
-    fetchUser();
-  }, );
 
   /**
  * A navigation button used for switching pages in the app.s

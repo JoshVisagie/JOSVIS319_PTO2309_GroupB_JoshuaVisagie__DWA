@@ -7,6 +7,7 @@ const SupabaseTest =()=> {
     const [post,setPost] = useState({title:'', content:""})
     const {title, content} = post
     const id = useAppSelector(state=> state.userData.user?.id)   
+    
     useEffect(()=>{
         fetchPosts()
     },[])

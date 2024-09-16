@@ -10,6 +10,7 @@ import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
+import { supabase } from "../../../supabaseClient";
 
 import AppBar from "@mui/material/AppBar";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -23,6 +24,10 @@ import { useRef , useEffect, useState} from "react";
 
 
 export default function BottomAppBar() {
+
+   
+
+
   const playerRef = useRef<ReactPlayer | null>(null);
   const theme = useTheme();
   const dispatch = useAppDispatch();
