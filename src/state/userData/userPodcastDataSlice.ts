@@ -59,6 +59,14 @@ export const updateLastListenedPodcast = createAsyncThunk(
   }
 );
 
+interface Liked{
+episodeID: string
+podcastID:string
+season:string
+episode:string
+likedAt:string
+
+}
 interface UserPodcastDataState {
   userPodcastData: {
     email: string;
@@ -66,6 +74,7 @@ interface UserPodcastDataState {
     listen_time: string[];
     liked: string[];
     last_listen: string;
+    likedPodcast:Liked[]
   } | null;
   loading: boolean;
   error: string | null;
