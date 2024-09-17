@@ -8,7 +8,8 @@ import userReducer from "./userData/userDataSlice";
 import displayReducer from "./display/displaySlice";
 import searchReducer from "./podcasts/searchSlice";
 import mediaSlice from "./mediaPlayer/mediaSlice";
-import  podcastUserDataSlice from "./userData/userDataPodcasts"
+import userPodcastDataSlice from "./userData/userPodcastDataSlice";
+import formattedDataSlice from "./userData/formattedDataSlice";
 //Global store
 export const store = configureStore({
   reducer: {
@@ -17,10 +18,9 @@ export const store = configureStore({
     individualPodcast: individualPodcastReducer,
     userData: userReducer,
     display: displayReducer,
-    media:mediaSlice,
-    podcastUserData: podcastUserDataSlice,
-
-
+    media: mediaSlice,
+    userPodcastData: userPodcastDataSlice,
+    formattedData: formattedDataSlice,
   },
 });
 
