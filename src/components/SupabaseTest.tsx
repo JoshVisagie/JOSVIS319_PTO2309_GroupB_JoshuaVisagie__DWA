@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../reduxHooks"; // Assuming you have these hooks set up
 import { fetchUserPodcastData } from "../state/userData/userPodcastDataSlice";
-
+import { selectLikedPodcast } from "../state/userData/userPodcastDataSlice";
 const MyPodcastComponent = () => {
   const dispatch = useAppDispatch();
 
@@ -23,7 +23,11 @@ const MyPodcastComponent = () => {
   if (userData.error) {
     return <p>Error loading user data: {userData.error}</p>;
   }
+  const likedEpisodes = useAppSelector(selectLikedPodcast);
 
+  const likedDataAsString = userData.userPodcastData? JSON.stringify(userData.userPodcastData.likedPodcast) : [{}]
+    
+  
   return (
     <div>
       <h1>Podcast Data</h1>
@@ -31,7 +35,7 @@ const MyPodcastComponent = () => {
       {userData.userPodcastData && (
         <ul>
           <li>Last Listened: {userData.userPodcastData.last_listen}</li>
-          <li>Liked Podcasts: {userData.userPodcastData.liked.join(", ")}</li>
+          <li>Liked Podcasts: {likedDataAsString}</li>
           {/* Render other data as needed */}
         </ul>
       )}

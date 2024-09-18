@@ -11,47 +11,44 @@ export interface Liked{
   }
 
   
-export const fetchUserPodcastData = createAsyncThunk(
-  "UserData/fetchUserData",
-  async (email: string) => {
-    console.log(email);
-    const { data, error } = await supabase
-      .from("user_podcast_data")
-      .select("*")
-      .eq("email", email) // Fetch by email
-      .single(); // Expect a single row
-
-    if (error) {
-      console.error("Error fetching user data:", error.message);
-      throw new Error(error.message);
+  export const fetchUserPodcastData = createAsyncThunk(
+    "UserData/fetchUserData",
+    async (email: string) => {
+      const { data, error } = await supabase
+        .from("user_podcast_data")
+        .select("*")
+        .eq("email", email)
+        .single(); // Fetching a single row
+  
+      if (error) {
+        throw new Error(error.message);
+      }
+  console.log("fetched",data)
+      return data; // Directly return the fetched data
     }
+  );
 
-    return data;
-  }
-);
-
-export const updateLikedPodcasts = createAsyncThunk(
-  "UserData/updateLikedPodcasts",
-  async ({
-    userEmail,
-    liked,
-  }: {
-    userEmail: string | null;
-    liked: Liked[];
-  }) => {
-    console.log(liked)
-    if (!userEmail) throw new Error("No user email provided.");
-
-    const { data, error } = await supabase
-      .from("user_podcast_data")
-      .update({ liked_podcasts: liked }) // directly update with new structured liked data
-      .eq("email", userEmail);
-
-    if (error) throw new Error(error.message);
-
-    return liked; // Return the updated liked array for further use
-  }
-);
+  export const updateLikedPodcasts = createAsyncThunk(
+    "UserData/updateLikedPodcasts",
+    async ({
+      userEmail,
+      liked_podcasts, 
+    }: {
+      userEmail: string | null;
+      liked_podcasts;
+    }) => {
+      if (!userEmail) throw new Error("No user email provided.");
+      console.log('updating ', liked_podcasts)
+      const { data, error } = await supabase
+        .from("user_podcast_data")
+        .update({ liked_podcasts })  // Update Supabase field directly
+        .eq("email", userEmail);
+  
+      if (error) throw new Error(error.message);
+  
+      return liked_podcasts;  // Return the updated array
+    }
+  );
 
 // Async action to update last listened podcast
 export const updateLastListenedPodcast = createAsyncThunk(
@@ -80,7 +77,7 @@ interface UserPodcastDataState {
     created_at: string;
     listen_time: string[];
     last_listen: string;
-    likedPodcast:Liked[]
+    liked_podcasts: Liked[];  // Use this consistently
   } | null;
   loading: boolean;
   error: string | null;
@@ -95,7 +92,17 @@ const initialState: UserPodcastDataState = {
 const userPodcastDataSlice = createSlice({
   name: "podcastUserData",
   initialState,
-  reducers: {},
+  reducers: {
+    updateUserPodcastDataLocally: (
+      state,
+      action: PayloadAction<{ userEmail: string; liked: Liked[] }>
+    ) => {
+      // Find the user's podcast data and update liked_podcast locally
+      if (state.userPodcastData && state.userPodcastData.email === action.payload.userEmail) {
+        state.userPodcastData.liked_podcasts = action.payload.liked;
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchUserPodcastData.pending, (state) => {
@@ -104,17 +111,7 @@ const userPodcastDataSlice = createSlice({
       })
       .addCase(fetchUserPodcastData.fulfilled, (state, action) => {
         state.loading = false;
-      
-        // Parse liked JSON strings into actual objects
-        const likedPodcast = action.payload.liked.map((likedItem: string) => {
-          return JSON.parse(likedItem); // Convert string to object
-        });
-      
-        // Populate userPodcastData with parsed likedPodcast
-        state.userPodcastData = {
-          ...action.payload,
-          likedPodcast: [...likedPodcast, ...action.payload.liked_podcasts], // Combine both liked sources
-        };
+        state.userPodcastData = action.payload;  // Store entire user data
       })
       .addCase(fetchUserPodcastData.rejected, (state, action) => {
         state.loading = false;
@@ -123,14 +120,12 @@ const userPodcastDataSlice = createSlice({
   },
 });
 
-
 const selectUserPodcastData = (state: RootState) => state.userPodcastData.userPodcastData;
+
 export const selectLikedPodcast = createSelector(
   [selectUserPodcastData],
-  (userPodcastData) => {
-    console.log("Parsed likedPodcast", userPodcastData?.likedPodcast);
-    return userPodcastData?.likedPodcast || [];
-  }
+  (userPodcastData) => userPodcastData?.liked_podcasts || []
 );
 
+export const { updateUserPodcastDataLocally } = userPodcastDataSlice.actions;
 export default userPodcastDataSlice.reducer;
