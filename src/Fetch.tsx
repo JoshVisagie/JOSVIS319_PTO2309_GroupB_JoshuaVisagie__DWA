@@ -55,50 +55,6 @@ function Fetch() {
     }
   }, [dispatch, loggedIn, email]);
 
-  const splitLikedData = (likedPodcasts: string[]) => {
-    return (
-      likedPodcasts?.map((podcast) => {
-        if (podcast) {
-          // Check that the podcast string is not null/undefined
-          const chunks = podcast.split(/[-#]/g);
-          const timeAsInt = parseInt(chunks[3]);
-          const date = new Date(timeAsInt).toLocaleDateString();
-  
-          return {
-            podcastID: chunks[0],
-            season: chunks[1],
-            episode: chunks[2],
-            date: date,
-            episodeID: podcast,
-          };
-        }
-        console.warn('Invalid podcast data encountered:', podcast);
-        return null; // Return null for invalid data
-      }).filter(Boolean) // Filter out null entries
-    );
-  };
-  
-  useEffect(() => {
-    if (userPodcastData?.liked && Array.isArray(userPodcastData.liked)) {
-      console.log('help', userPodcastData.liked);
-  
-      const likedDataObj = splitLikedData(userPodcastData.liked);
-      console.log(likedDataObj);
-  
-      const groupedLikedPodcasts = likedDataObj.reduce((acc, episode) => {
-        if (!acc[episode.podcastID]) {
-          acc[episode.podcastID] = [];
-        }
-        acc[episode.podcastID].push(episode);
-        return acc;
-      }, {} as Record<string, Episode[]>);
-  
-      dispatch(setFormattedLiked(groupedLikedPodcasts));
-    } else {
-      console.warn('No liked podcasts found or liked data is not an array.');
-    }
-  }, [userPodcastData, dispatch]);
-  
 
   return <div>{email ? "" : "notLoggedin"}</div>;
 }

@@ -11,15 +11,15 @@ import Grid from "@mui/joy/Grid";
 import { useAppSelector, useAppDispatch } from "../../../reduxHooks";
 import { playPause, setMedia } from "../../../state/mediaPlayer/mediaSlice";
 
-import { updateLikedPodcasts } from "../../../state/userData/userPodcastDataSlice";
-import { supabase } from "../../../supabaseClient";
+import LikeButton from "../buttons/LikeButton";
 
 // Props interface for EpisodeCard
 interface EpisodeCardProps {
   episode: Episode; // Single episode object passed as prop
-  id: string;
+  podcastID:string
   podcastTitle: string;
   podcastImage: string;
+  season:number
 }
 
 // Props interface for Episode
@@ -30,6 +30,7 @@ interface Episode {
   episode: number;
   file: string;
   podcastImage: string;
+  
 }
 /**
  * A component for A single Episodes card
@@ -37,9 +38,10 @@ interface Episode {
  *
  * @param {Episode} episode episode to generate the episode card
  * @returns {React.FC}
+ * 
  */
 const EpisodeCard: React.FC<EpisodeCardProps> = (props) => {
-  const { id, podcastTitle, episode, podcastImage } = props;
+  const { podcastID, podcastTitle, episode, podcastImage, season} = props;
   const [isLiked, setIsLiked] = useState(false);
   const audioRef = React.useRef<HTMLAudioElement>(null);
   const media = useAppSelector((state) => state.media);
@@ -47,7 +49,7 @@ const EpisodeCard: React.FC<EpisodeCardProps> = (props) => {
   const dispatch = useAppDispatch();
   const email = useAppSelector((state) => state.userData.user?.email);
   const liked = useAppSelector(
-    (state) => state.userPodcastData.userPodcastData?.liked
+    (state) => state.userPodcastData.userPodcastData?.likedPodcast
   );
   // Handles play and pause functionality
   const handlePlayPause = () => {
@@ -69,18 +71,8 @@ const EpisodeCard: React.FC<EpisodeCardProps> = (props) => {
   };
 
   // Handles like/unlike functionality
-  const handleLike = () => {
-    setIsLiked(!isLiked);
-    if (email) {
-      const time = new Date().getTime();
-      dispatch(
-        updateLikedPodcasts({
-          userEmail: email,
-          liked: [...(liked || []), `${id}#${time}`], // Append the episode ID to the liked list
-        })
-      );
-    }
-  };
+ 
+  
   return (
     <Grid
       container
@@ -110,9 +102,13 @@ const EpisodeCard: React.FC<EpisodeCardProps> = (props) => {
         </IconButton>
 
         {/* Like Button */}
-        <IconButton onClick={handleLike}>
-          {isLiked ? <FavoriteIcon color='error' /> : <FavoriteBorderIcon />}
-        </IconButton>
+        <LikeButton
+           episodeID= {`${podcastID}-${season}-${episode.episode}`}
+           podcastID= {podcastID}
+           season= {season}
+           episode= {episode.episode}
+           timestamp= {new Date().getTime()}
+        />
       </Grid>
     </Grid>
   );

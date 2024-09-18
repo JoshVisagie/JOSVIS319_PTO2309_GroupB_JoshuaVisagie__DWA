@@ -1,6 +1,16 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createSelector } from "@reduxjs/toolkit";
 import { supabase } from "../../supabaseClient"; // Make sure this is configured
+import { RootState } from "../store";
 
+export interface Liked{
+  episodeID: string
+  podcastID:string
+  season:string
+  episode:string
+  likedAt:string
+  }
+
+  
 export const fetchUserPodcastData = createAsyncThunk(
   "UserData/fetchUserData",
   async (email: string) => {
@@ -20,7 +30,6 @@ export const fetchUserPodcastData = createAsyncThunk(
   }
 );
 
-// Async action to update liked podcasts
 export const updateLikedPodcasts = createAsyncThunk(
   "UserData/updateLikedPodcasts",
   async ({
@@ -28,14 +37,19 @@ export const updateLikedPodcasts = createAsyncThunk(
     liked,
   }: {
     userEmail: string | null;
-    liked: string[];
+    liked: Liked[];
   }) => {
+    console.log(liked)
+    if (!userEmail) throw new Error("No user email provided.");
+
     const { data, error } = await supabase
       .from("user_podcast_data")
-      .update({ liked: liked })
+      .update({ liked_podcasts: liked }) // directly update with new structured liked data
       .eq("email", userEmail);
+
     if (error) throw new Error(error.message);
-    return liked;
+
+    return liked; // Return the updated liked array for further use
   }
 );
 
@@ -59,20 +73,12 @@ export const updateLastListenedPodcast = createAsyncThunk(
   }
 );
 
-interface Liked{
-episodeID: string
-podcastID:string
-season:string
-episode:string
-likedAt:string
 
-}
 interface UserPodcastDataState {
   userPodcastData: {
     email: string;
     created_at: string;
     listen_time: string[];
-    liked: string[];
     last_listen: string;
     likedPodcast:Liked[]
   } | null;
@@ -98,7 +104,17 @@ const userPodcastDataSlice = createSlice({
       })
       .addCase(fetchUserPodcastData.fulfilled, (state, action) => {
         state.loading = false;
-        state.userPodcastData = action.payload; // Data from Supabase
+      
+        // Parse liked JSON strings into actual objects
+        const likedPodcast = action.payload.liked.map((likedItem: string) => {
+          return JSON.parse(likedItem); // Convert string to object
+        });
+      
+        // Populate userPodcastData with parsed likedPodcast
+        state.userPodcastData = {
+          ...action.payload,
+          likedPodcast: [...likedPodcast, ...action.payload.liked_podcasts], // Combine both liked sources
+        };
       })
       .addCase(fetchUserPodcastData.rejected, (state, action) => {
         state.loading = false;
@@ -106,5 +122,15 @@ const userPodcastDataSlice = createSlice({
       });
   },
 });
+
+
+const selectUserPodcastData = (state: RootState) => state.userPodcastData.userPodcastData;
+export const selectLikedPodcast = createSelector(
+  [selectUserPodcastData],
+  (userPodcastData) => {
+    console.log("Parsed likedPodcast", userPodcastData?.likedPodcast);
+    return userPodcastData?.likedPodcast || [];
+  }
+);
 
 export default userPodcastDataSlice.reducer;

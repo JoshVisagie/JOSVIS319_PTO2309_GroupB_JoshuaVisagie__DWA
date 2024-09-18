@@ -27,6 +27,7 @@ interface Episode {
   title: string; // Title of the episode
   description: string; // Description of the episode
   episode: number; // Episode number
+  season: number//Season number
   file: string; // URL for the audio file of the episode
 }
 
@@ -103,10 +104,11 @@ const PodInfo: React.FC<PodInfoProps> = (props) => {
             ?.episodes.map((episode:Episode) => (
               <EpisodeCard
                 key={episode.episode}
-                podcastTitle={data.data?.title}
-                podcastImage={data.data?.image}
-                id={`${id}-${selectedSeason}-${episode.episode}`}
+                podcastTitle={data.data.title}
+                podcastImage={data.data.image}
+                podcastID={id}
                 episode={episode}
+                season ={selectedSeason}
               ></EpisodeCard>
             ))}
         </Stack>
