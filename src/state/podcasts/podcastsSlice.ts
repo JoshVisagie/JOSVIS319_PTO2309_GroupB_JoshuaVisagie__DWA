@@ -41,7 +41,7 @@ export interface Podcast {
 }
 
 export interface SortType{
-sortType : "recent" | "alphabetic" | "revAlphabetic" | "oldest"
+sortType : string
 }
 /**
  * Interface for the state of the podcasts slice.

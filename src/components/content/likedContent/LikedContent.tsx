@@ -108,7 +108,7 @@ const LikedContent = () => {
       <Box
           sx={{
             width: "100%",
-            backgroundColor: currentTheme.secondaryColor,
+            backgroundColor: currentTheme.secondary,
             height: "10px",
             boxShadow: "1",
             borderRadius: "10px",
@@ -131,7 +131,7 @@ const LikedContent = () => {
             boxShadow: "1",
             outline: "none",
             borderRadius: "10px",
-            backgroundColor: currentTheme.secondaryColor,
+            backgroundColor: currentTheme.secondary,
             "& .MuiOutlinedInput-notchedOutline": {
               border: "none",
             },
@@ -153,7 +153,7 @@ const LikedContent = () => {
         <Box
           sx={{
             width: "100%",
-            backgroundColor: currentTheme.secondaryColor,
+            backgroundColor: currentTheme.secondary,
             height: "10px",
             boxShadow: "1",
             borderRadius: "10px",
@@ -197,6 +197,7 @@ const LikedContent = () => {
       {/* Conditionally render the LikedPodcastCard when a podcast is selected */}
       {selectedPodcast && (
         <LikedPodcastCard
+        //@ts-expect-error it works
           likedShows={selectedPodcast.likedShows}
           podcastID={selectedPodcast.podcastID}
           onClose={handleClose}

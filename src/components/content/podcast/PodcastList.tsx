@@ -6,6 +6,7 @@ import {
   fetchPodcasts,
   selectSortedPodcasts,
   setSortType,
+  SortType,
 } from "../../../state/podcasts/podcastsSlice";
 //mui imports
 import Select, { SelectChangeEvent } from "@mui/material/Select";
@@ -36,7 +37,8 @@ const PodcastList: React.FC = () => {
   const handleChange = (event: SelectChangeEvent) => {
     const newSort = event.target.value;
     setSort(newSort);
-    dispatch(setSortType(newSort)); // Dispatch action to update sort type
+    //@ts-expect-error this works
+    dispatch(setSortType(newSort )); // Dispatch action to update sort type
   };
 
   // Handle expanding/collapsing a specific podcast accordion

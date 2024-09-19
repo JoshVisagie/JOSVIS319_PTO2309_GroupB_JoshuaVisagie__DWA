@@ -4,7 +4,6 @@
  * 
  * 
  */
-import { duration } from "@mui/material";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 /**
@@ -41,20 +40,20 @@ interface SetMediaAction{
  * Sets the initial state of the page to home
  *
  */
-const initialState = { 
+const initialState : MediaState = { 
     id: null,
     url: null,
     episodeTitle: null,
     podcastTitle: null,
     podcastImage: null,
+    podcastID:null,
     playing: false,
     isLiked:false,
     volume: 0.8,
     muted: false,
     timePlaying: 0,
     duration: 0,
-    
-} satisfies MediaState as MediaState
+} 
 
 /**
  * Creates a slice for handling changing what should be displayed.

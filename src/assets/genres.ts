@@ -1,13 +1,7 @@
 import {
     School,
     Gavel,
-    HistoryEdu,
-    TheaterComedy,
-    MovieFilter,
-    Work,
-    RocketLaunch,
-    Newspaper,
-    FamilyRestroom,
+
   } from "@mui/icons-material/";
   
  const genres={

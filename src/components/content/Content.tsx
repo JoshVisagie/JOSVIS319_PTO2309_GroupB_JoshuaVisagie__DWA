@@ -5,7 +5,6 @@ import { useAppSelector } from "../../reduxHooks";
 import PodcastList from "./podcast/PodcastList";
 import LogInForm from "./user/LogInForm";
 import SearchContent from "./search/SearchContent";
-import SupabaseTest from "../SupabaseTest";
 import LikedContent from "./likedContent/LikedContent";
 
 import { Box } from "@mui/material";

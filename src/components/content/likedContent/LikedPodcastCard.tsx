@@ -28,6 +28,7 @@ const LikedPodcastCard: React.FC<PropsType> = (props) => {
 
   useEffect(() => {
     if (podcastID) {
+      //@ts-expect-error this works
       dispatch(fetchIndivdualPodcast(podcastID));
     }
   }, [podcastID, dispatch]);

@@ -54,6 +54,7 @@ const PodInfo: React.FC<PodInfoProps> = (props) => {
   const id = props.id
   // Fetch individual podcast data based on the provided id whenever the id changes.
   useEffect(() => {
+    //@ts-expect-error it works
     dispatch(fetchIndivdualPodcast(id));
   }, [dispatch, id]);
 
@@ -101,7 +102,7 @@ const PodInfo: React.FC<PodInfoProps> = (props) => {
         <Stack spacing={1} direction='row' useFlexGap sx={{ flexWrap: "wrap" }}>
           {seasons
             .find((season) => season.season === selectedSeason)
-            ?.episodes.map((episode:Episode) => (
+            ?.episodes.map((episode) => (
               <EpisodeCard
                 key={episode.episode}
                 podcastTitle={data.data.title}

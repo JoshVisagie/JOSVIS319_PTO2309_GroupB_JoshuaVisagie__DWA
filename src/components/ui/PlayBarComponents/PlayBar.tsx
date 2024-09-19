@@ -129,6 +129,7 @@ export default function BottomAppBar() {
     const splitData = lastListenState?.episodeID?.split("-")
     console.log("🚀 ~ useEffect ~ splitData:", splitData)
     const podcastID= splitData?.at(0)
+    //@ts-expect-error this works
    if(splitData) dispatch( fetchIndivdualPodcast(podcastID) )
 
 

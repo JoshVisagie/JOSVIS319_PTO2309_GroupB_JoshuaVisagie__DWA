@@ -10,9 +10,10 @@ import { selectLikedPodcast } from "../../../state/userData/userPodcastDataSlice
 interface LikeButtonProps {
   episodeID: string;
   podcastID: string;
-  season: number;
-  episode: number;
-  timestamp: number;
+  season?: number;
+  episode?: number;
+  timestamp?: number;
+  isLiked?:boolean;
 }
 
 
