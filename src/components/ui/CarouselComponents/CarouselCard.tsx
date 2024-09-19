@@ -9,6 +9,7 @@ import { useAppSelector } from "../../../reduxHooks";
 //react imports
 import { useEffect, useState } from "react";
 
+import PodcastDetailsModal from "../../PodcastModal";
 /**
  * CarouselCard component displays a random podcast's image and title.
  *
@@ -37,11 +38,21 @@ const CarouselCard = (props: { cardColor: string }): JSX.Element => {
   /** Image URL and title of the selected podcast */
   const imageUrl = currentPodcast?.image ?? "";
   const title = currentPodcast?.title ?? "Unknown Title";
+  const id = currentPodcast?.id?? ""
+  const [modalOpen, setModalOpen] = useState(false);
 
-    //TODO add functionality to navigate to a podcast from here
+
   const handleClick=()=>{
-    console.log(currentPodcast.title)
+    setModalOpen(currentState=>!currentState);
   }
+  const handleClose = () => {
+    console.log("closed")
+    setModalOpen(currentState=>!currentState);
+    console.log(modalOpen)
+  };
+  useEffect(() => {
+    console.log("Modal open state changed:", modalOpen);
+  }, [modalOpen]);
   return (
     <Card
     onClick = {handleClick}
@@ -100,6 +111,12 @@ const CarouselCard = (props: { cardColor: string }): JSX.Element => {
           {title}
         </Typography>
       </Box>
+     {modalOpen && <PodcastDetailsModal
+      podcastID={id}
+      open={modalOpen}
+      onClose={handleClick}
+      podcastTitle={title}
+      />}
     </Card>
   );
 };

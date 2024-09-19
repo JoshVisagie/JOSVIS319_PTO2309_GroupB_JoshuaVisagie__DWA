@@ -48,7 +48,7 @@ const EpisodeCard: React.FC<EpisodeCardProps> = (props) => {
   const dispatch = useAppDispatch();
   const email = useAppSelector((state) => state.userData.user?.email);
   
-  const id = `${podcastID}-${season}-${episode}`
+  const id = `${podcastID}-${season}-${episode.episode}`
   // Handles play and pause functionality
   const handlePlayPause = () => {
     if (media.id !== id) {

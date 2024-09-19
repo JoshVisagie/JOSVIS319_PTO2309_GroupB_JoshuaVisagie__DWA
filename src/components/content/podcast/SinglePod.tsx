@@ -1,83 +1,124 @@
-// react imports
-
-// mui imports
+import React from "react";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Grid } from "@mui/joy";
-
-// PodInfo component import
+import { Box, Typography } from "@mui/material";
+import currentTheme from "../../../style";
 import PodInfo from "./PodInfo";
 
-/**
- * Define the props interface for the SinglePod component
- */
 interface SinglePodProps {
-  podcastTitle: string; // Title of the podcast
-  podcastID: string; // Unique identifier for the podcast
-  podcastGenres: number[]; // Array of genres the podcast belongs to
-  podcastSeasons: number; // Number of seasons in the podcast
-  podcastImg: string; // URL of the podcast image
-  podcastDate: string; // Date when the podcast was last updated
-  podcastDescription: string; // Description of the podcast
-  expanded: boolean; // Whether the accordion is expanded
-  handleCollapse: (id: string) => void; // Function to handle accordion expand/collapse
+  podcastTitle: string;
+  podcastID: string;
+  podcastGenres: number[];
+  podcastSeasons: number;
+  podcastImg: string;
+  podcastDate: string;
+  podcastDescription: string;
+  expanded: boolean;
+  handleCollapse: (id: string) => void;
 }
 
-/**
- * SinglePod component represents each individual podcast within the accordion,
- * displaying its summary, title, and expandable details with PodInfo component.
- */
 const SinglePod: React.FC<SinglePodProps> = (props) => {
-  const date = new Date(props.podcastDate); // Format the podcast's date.
+  const date = new Date(props.podcastDate);
 
   return (
     <Accordion
-      expanded={props.expanded} // Controls whether the accordion is expanded or collapsed.
-      onChange={() => props.handleCollapse(props.podcastID)} // Toggle expanded state when clicked.
+      expanded={props.expanded}
+      onChange={() => props.handleCollapse(props.podcastID)}
       square={false}
       sx={{
-        backgroundColor: "#06AEFF",
+        backgroundColor: currentTheme.secondary,
         borderRadius: "15px",
+        boxShadow: 5,
         margin: "20px",
+        maxWidth: "100%",
       }}
     >
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
         aria-controls='panel3-content'
         id='panel3-header'
-        className='accordian--singlePod--summary'
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: "16px",
+        }}
       >
-        {/* Accordion summary showing the podcast's image, title, and season count */}
-        <Grid
-          container
-          className='accordian--singlePod'
+        {/* Image Section */}
+        <Box
           sx={{
-            padding: "8px 16px",
-            width: "100%",
-            color: "#FFFFFF",
+            flexShrink: 0,
+            width: { xs: "40%", sm: "25%" },
+            padding: "8px",
           }}
         >
-          <Grid>
-            <img
-              className='accordian--logo'
-              src={props.podcastImg}
-              height='100px'
-              alt='Podcast Logo'
-            />
-          </Grid>
-          <Grid xs className='accordian--singlePod--div'>
-            <h3>{props.podcastTitle}</h3> {date.toLocaleDateString()}
-            <p>
-              {props.podcastSeasons}{" "}
-              {props.podcastSeasons > 1 ? "Seasons" : "Season"}
-            </p>
-          </Grid>
-        </Grid>
+          <img
+            src={props.podcastImg}
+            alt='Podcast Logo'
+            style={{ width: "100%", height: "auto", borderRadius: "8px" }}
+          />
+        </Box>
+
+        {/* Content Section */}
+        <Box
+          sx={{
+            flex: 1,
+            padding: "16px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            overflow: "hidden",
+          }}
+        >
+          {/* Title */}
+          <Typography
+            variant="h5"
+            sx={{
+              fontWeight: "bold",
+              mb: 1,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              fontSize: { xs: "1.2rem", sm: "1.5rem" },
+            }}
+          >
+            {props.podcastTitle}
+          </Typography>
+
+          {/* Last Updated Date */}
+          <Typography
+            variant="body2"
+            sx={{
+              mb: 1,
+              color: "text.secondary",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              fontSize: { xs: "0.9rem", sm: "1rem" },
+            }}
+          >
+            Last Updated: {date.toLocaleDateString()}
+          </Typography>
+
+          {/* Seasons */}
+          <Typography
+            variant="body2"
+            sx={{
+              color: "text.secondary",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              fontSize: { xs: "0.9rem", sm: "1rem" },
+            }}
+          >
+            {props.podcastSeasons} {props.podcastSeasons > 1 ? "Seasons" : "Season"}
+          </Typography>
+        </Box>
       </AccordionSummary>
       <AccordionDetails>
-        {/* Display detailed information of the podcast when expanded */}
         {props.expanded && <PodInfo id={props.podcastID} />}
       </AccordionDetails>
     </Accordion>
