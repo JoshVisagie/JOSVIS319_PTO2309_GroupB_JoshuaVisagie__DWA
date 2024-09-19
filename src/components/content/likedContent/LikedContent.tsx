@@ -6,6 +6,33 @@ import { Card, Box, Paper } from "@mui/material";
 import LikedPodcastCard from "./LikedPodcastCard";
 
 
+const sortPods = (data, sortType, allpodcasts) => {
+  console.log("~  data", data)
+  console.log( "~ all podcasts:",allpodcasts)
+  return [...data].sort((a, b) => {
+    
+
+  const podcastA =  allpodcasts.find((podcast) => podcast.id === a[0])
+  const podcastB = allpodcasts.find((podcast) => podcast.id === b[0])
+  
+    // const podcast1= allPodcasts[a[0]]
+    // const podcast2= allPodcasts[]
+    console.log("~ podcast1:",podcastA)
+    switch (sortType) {
+      case "alphabetic":
+        return podcastA.title.localeCompare(podcastB.title);
+      case "revAlphabetic":
+        return podcastB.title.localeCompare(podcastA.title);
+      case "recent":
+        return new Date(podcastA.updated).getTime() - new Date(podcastB.updated).getTime();
+      case "oldest":
+        return new Date(podcastB.updated).getTime() - new Date(podcastA.updated).getTime();
+      default:
+        return 0;
+    }
+  });
+}
+
 
 const LikedContent = () => {
   const dispatch = useAppDispatch();
@@ -14,8 +41,8 @@ const LikedContent = () => {
   const likedEpisodes = useAppSelector(selectLikedPodcast);
   const email = useAppSelector((state) => state.userData.user?.email);
   const allPods = useAppSelector((state) => state.podcasts.data); // All podcasts data
-
-
+  const [filterType, setFilterType] = useState('revAlphabetic')
+  console.log("~ all pods ",allPods)
   // State to store the selected podcast
   const [selectedPodcast, setSelectedPodcast] = useState<{ podcastID: string; likedShows: Liked[] } | null>(null);
 
@@ -34,6 +61,7 @@ const LikedContent = () => {
 
   // Function to group liked podcasts by their podcastID
   const groupLikedByPodcast = (likedPodcasts: Liked[]): GroupedByPodcast => {
+    
     return likedPodcasts.reduce((acc: GroupedByPodcast, likedPodcast: Liked) => {
       const { podcastID } = likedPodcast;
 
@@ -48,10 +76,12 @@ const LikedContent = () => {
       return acc;
     }, {}); // Initial value is an empty object
   };
-
+  console.log(groupLikedByPodcast(likedEpisodes))
   // Group liked episodes by podcastID
   const groupedByPodcast = groupLikedByPodcast(likedEpisodes);
-
+  console.log("~grouped", groupedByPodcast)
+  const sortedPods= sortPods(Object.entries(groupedByPodcast),filterType, allPods )
+  console.log("~ sortedPods", sortedPods)
   // Handle podcast card click
   const handleClick = (podcastID: string) => {
     const likedShows = groupedByPodcast[podcastID]; // Get liked shows for the podcastID
@@ -64,10 +94,11 @@ const LikedContent = () => {
     setSelectedPodcast(null); // Reset the selected podcast to close the modal
   };
 
+  
   return (
     <div>
       <h1>Liked Podcasts</h1>
-      {Object.entries(groupedByPodcast).map(([podcastID, likedPodcasts]) => {
+      {sortedPods.map(([podcastID, likedPodcasts]) => {
         // Find the corresponding podcast in the allPods array by podcastID
         const matchingPodcast = allPods.find((podcast) => podcast.id === podcastID);
 
