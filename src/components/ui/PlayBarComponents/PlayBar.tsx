@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from "../../../reduxHooks";
 import { setTime } from "../../../state/mediaPlayer/mediaSlice"; // Action to set progress time
 import ReactPlayer from "react-player";
 import currentTheme from "../../../style";
+import { useEffect } from "react";
 
 export default function BottomAppBar() {
   const playerRef = useRef<ReactPlayer | null>(null);
@@ -23,6 +24,25 @@ export default function BottomAppBar() {
     const currentTime = Math.floor(progress.playedSeconds);
     dispatch(setTime(currentTime));
   };
+
+  useEffect(() => {
+
+    const onBeforeUnload = (ev: Event) => {
+      if (playing) {
+        ev.preventDefault();
+      }
+      ev.returnValue = media.playing;
+      
+      return media.playing;
+    };
+    
+    window.addEventListener('beforeunload', onBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', onBeforeUnload);
+    };
+    
+  }, []);
 
   return (
     <Fragment>
