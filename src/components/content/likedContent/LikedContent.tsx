@@ -4,7 +4,9 @@ import { fetchUserPodcastData } from "../../../state/userData/userPodcastDataSli
 import { selectLikedPodcast } from "../../../state/userData/userPodcastDataSlice";
 import { Card, Box, Paper } from "@mui/material";
 import LikedPodcastCard from "./LikedPodcastCard";
-
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import currentTheme from "../../../style";
 
 const sortPods = (data, sortType, allpodcasts) => {
   console.log("~  data", data)
@@ -94,10 +96,71 @@ const LikedContent = () => {
     setSelectedPodcast(null); // Reset the selected podcast to close the modal
   };
 
+  const handleChange= (event) =>{
+    setFilterType(event.target.value)
+  }
   
   return (
-    <div>
+    <Box>
       <h1>Liked Podcasts</h1>
+      <Box 
+      sx={{display:"flex"}}>
+      <Box
+          sx={{
+            width: "100%",
+            backgroundColor: currentTheme.secondaryColor,
+            height: "10px",
+            boxShadow: "1",
+            borderRadius: "10px",
+            marginTop: "7px",
+          }}
+        ></Box>
+      <Select
+          label='sort'
+          value={filterType}
+          onChange={handleChange}
+          variant='outlined'
+          sx={{
+            width: "120px",
+            height: "30px",
+            padding: "0px",
+            fontSize: "0.875rem",
+
+            margin: 2,
+            border: "none",
+            boxShadow: "1",
+            outline: "none",
+            borderRadius: "10px",
+            backgroundColor: currentTheme.secondaryColor,
+            "& .MuiOutlinedInput-notchedOutline": {
+              border: "none",
+            },
+            "&:focus": {
+              outline: "none",
+              boxShadow: "none",
+            },
+            ".MuiSelect-select": {
+              padding: "4px 8px",
+            },
+          }}
+        >
+          <MenuItem value='recent'>New - Old</MenuItem>
+          <MenuItem value='oldest'>Old - New</MenuItem>
+          <MenuItem value='alphabetic'>A - Z</MenuItem>
+          <MenuItem value='revAlphabetic'>Z - A</MenuItem>
+        
+        </Select>
+        <Box
+          sx={{
+            width: "100%",
+            backgroundColor: currentTheme.secondaryColor,
+            height: "10px",
+            boxShadow: "1",
+            borderRadius: "10px",
+            marginTop: "7px",
+          }}
+        ></Box>
+        </Box>
       {sortedPods.map(([podcastID, likedPodcasts]) => {
         // Find the corresponding podcast in the allPods array by podcastID
         const matchingPodcast = allPods.find((podcast) => podcast.id === podcastID);
@@ -139,7 +202,7 @@ const LikedContent = () => {
           onClose={handleClose}
         />
       )}
-    </div>
+    </Box>
   );
 };
 
