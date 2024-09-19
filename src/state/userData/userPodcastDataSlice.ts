@@ -58,7 +58,7 @@ export const updateLastListenedPodcast = createAsyncThunk(
     last_listen,
   }: {
     userEmail: string;
-    last_listen: string;
+    last_listen
   }) => {
     const { data, error } = await supabase
       .from("user_podcast_data")
@@ -70,13 +70,37 @@ export const updateLastListenedPodcast = createAsyncThunk(
   }
 );
 
+export const updateListenTime = createAsyncThunk(
+  "UserData/updateListenTime",
+  async ({
+    userEmail,
+    listen_time,
+  }: {
+    userEmail: string;
+    listen_time
+  }) => {
+    const { data, error } = await supabase
+      .from("user_podcast_data")
+      .update({ listen_time: listen_time })
+      .eq("email", userEmail);
+
+    if (error) throw new Error(error.message);
+    return listen_time;
+  }
+);
+
+export interface ListenData{
+  episodeID: string|null
+  timePlayed: number|null
+  isDone: boolean
+}
 
 interface UserPodcastDataState {
   userPodcastData: {
     email: string;
     created_at: string;
-    listen_time: string[];
-    last_listen: string;
+    listen_time: ListenData[];
+    last_listen: ListenData;
     liked_podcasts: Liked[];  // Use this consistently
   } | null;
   loading: boolean;

@@ -18,7 +18,6 @@ interface LikeButtonProps {
 
 
 const LikeButton: React.FC<LikeButtonProps> = (props: LikeButtonProps) => {
-    console.log(props)
   const { episodeID, podcastID, season, episode, timestamp } = props;
 
   const dispatch = useAppDispatch();
@@ -26,7 +25,6 @@ const LikeButton: React.FC<LikeButtonProps> = (props: LikeButtonProps) => {
 
   // Ensure likedEpisodes is always an array, defaulting to an empty array if undefined
   const likedEpisodes = useAppSelector(selectLikedPodcast);
-  console.log("Liked",likedEpisodes)
   // Check if the episode is already liked
   const isLiked = likedEpisodes.some(
     item => item?.episodeID === episodeID // Ensure item is not null or undefined
@@ -36,9 +34,7 @@ const LikeButton: React.FC<LikeButtonProps> = (props: LikeButtonProps) => {
     if (email) {
       // If the episode is already liked, remove it from the liked array
       let updatedLikes;
-      console.log('handling Update',likedEpisodes)
       if (isLiked) {
-         console.log('handleing is liked:',isLiked)
         updatedLikes = likedEpisodes.filter(
           (item: any) => item?.episodeID !== episodeID // Safeguard against null or undefined items
         );

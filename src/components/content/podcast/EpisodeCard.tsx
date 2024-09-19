@@ -11,6 +11,7 @@ import { useAppSelector, useAppDispatch } from "../../../reduxHooks";
 import { playPause, setMedia } from "../../../state/mediaPlayer/mediaSlice";
 
 import LikeButton from "../buttons/LikeButton";
+import { duration } from "@mui/material";
 
 // Props interface for EpisodeCard
 interface EpisodeCardProps {
@@ -55,10 +56,12 @@ const EpisodeCard: React.FC<EpisodeCardProps> = (props) => {
       console.log(episode.file, id);
       const newMedia = {
         id: id,
+        podcastID:podcastID,
         url: episode.file,
         episodeTitle: episode.title,
         podcastTitle: podcastTitle,
         podcastImage: podcastImage,
+    
       };
 
       dispatch(setMedia(newMedia));

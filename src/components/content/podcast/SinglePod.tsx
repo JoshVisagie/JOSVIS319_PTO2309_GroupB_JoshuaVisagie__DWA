@@ -58,7 +58,7 @@ const SinglePod: React.FC<SinglePodProps> = (props) => {
           <img
             src={props.podcastImg}
             alt='Podcast Logo'
-            style={{ width: "100%", height: "auto", borderRadius: "8px" }}
+            style={{ width: "100%", height: "auto", borderRadius: "8px",  maxWidth:"100px"}}
           />
         </Box>
 
@@ -79,9 +79,13 @@ const SinglePod: React.FC<SinglePodProps> = (props) => {
             sx={{
               fontWeight: "bold",
               mb: 1,
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
+              whiteSpace: "wrap",
+              
+              animation: props.podcastTitle && props.podcastTitle.length > 20 ? `scroll 10s linear infinite` : "none",
+              "@keyframes scroll": {
+                from: { transform: "translateX(0)" },
+                to: { transform: "translateX(-100%)" },
+              },
               fontSize: { xs: "1.2rem", sm: "1.5rem" },
             }}
           >

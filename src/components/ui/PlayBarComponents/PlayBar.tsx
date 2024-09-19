@@ -1,5 +1,5 @@
 import { useTheme } from "@mui/material/styles";
-import { Fragment, useRef } from "react";
+import { Fragment, useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -8,41 +8,131 @@ import Typography from "@mui/material/Typography";
 import AppBar from "@mui/material/AppBar";
 import CssBaseline from "@mui/material/CssBaseline";
 import { useAppDispatch, useAppSelector } from "../../../reduxHooks";
-import { setTime } from "../../../state/mediaPlayer/mediaSlice"; // Action to set progress time
+import { setTime, setDuration } from "../../../state/mediaPlayer/mediaSlice"; // Action to set progress time
 import ReactPlayer from "react-player";
 import currentTheme from "../../../style";
 import { useEffect } from "react";
+import { fetchIndivdualPodcast } from "../../../state/podcasts/individualPodcastSlice";
+import { updateLastListenedPodcast , updateListenTime, fetchUserPodcastData} from "../../../state/userData/userPodcastDataSlice";
+import { ListenData } from "../../../state/userData/userPodcastDataSlice";
+
+import CurrentPlayingBadge from "./CurrrentPlayingBadge";
 
 export default function BottomAppBar() {
   const playerRef = useRef<ReactPlayer | null>(null);
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const media = useAppSelector((state) => state.media);
-  const { url, episodeTitle, podcastTitle, playing, podcastImage } = media;
+  const listenedState= useAppSelector(state=>state.userPodcastData.userPodcastData?.listen_time)
+  const lastListenState= useAppSelector(state=>state.userPodcastData.userPodcastData?.last_listen)
+  console.log("🚀 ~ BottomAppBar ~ listenedState:", listenedState)
+  const {
+    url,
+    episodeTitle,
+    podcastTitle,
+    playing,
+    podcastImage,
+    id,
+    podcastID,
+    timePlaying,
+    duration,
+  } = media;
+  const email = useAppSelector((state) => state.userData.user?.email);
+  const [isDone, setIsDone] = useState(false);
+  
+  const updateListnedToData  =( data : ListenData)=>{
+    console.log("🚀 ~ BottomAppBar ~ listenedState in function:", listenedState)
+    console.log("🚀 ~ updateListnedToData ~ data:", data)
+
+    if(listenedState){
+    const potentialData = listenedState.find((episode)=>{
+
+        console.log("🚀 ~ potentialData ~ data.episodeID:", data.episodeID)
+   
+
+        return episode.episodeID === data.episodeID
+        
+    })
+    console.log("🚀 ~ potentialData ~ listenedState:", listenedState)
+    console.log("🚀 ~ potentialData ~ listenedState:", listenedState)
+   
+    const store = [...listenedState]
+   
+   
+    if(potentialData){
+      store[listenedState.indexOf(potentialData)] = data
+      
+    }else{
+        store.push(data)
+    }
+       
+
+    return store
+    }
+  }
 
   const handleProgress = (progress: { playedSeconds: number }) => {
+    if (timePlaying < duration) {
+      setIsDone(false);
+    }
+
     const currentTime = Math.floor(progress.playedSeconds);
     dispatch(setTime(currentTime));
+
+    const data : ListenData= {
+      episodeID: id,
+      timePlayed: timePlaying,
+      isDone: isDone,
+    };
+
+    dispatch(
+      updateLastListenedPodcast({ userEmail: email, last_listen: data })
+    );
+
+    const dataToUpdate= updateListnedToData(data)
+    dispatch(
+        updateListenTime({userEmail: email, listen_time: dataToUpdate})
+    )
+    dispatch(fetchUserPodcastData(email))
   };
 
   useEffect(() => {
-
     const onBeforeUnload = (ev: Event) => {
       if (playing) {
         ev.preventDefault();
       }
       ev.returnValue = media.playing;
-      
+
       return media.playing;
     };
-    
-    window.addEventListener('beforeunload', onBeforeUnload);
+
+    window.addEventListener("beforeunload", onBeforeUnload);
 
     return () => {
-      window.removeEventListener('beforeunload', onBeforeUnload);
+      window.removeEventListener("beforeunload", onBeforeUnload);
     };
-    
   }, []);
+
+  const handlePlay = () => {
+    if (playerRef.current) {
+      dispatch(setDuration(playerRef.current.getDuration()));
+    }
+
+    console.log("started");
+  };
+
+  const handleEnd = () => {
+    setIsDone(true);
+  };
+
+  useEffect(()=>{
+    const splitData = lastListenState?.episodeID?.split("-")
+    console.log("🚀 ~ useEffect ~ splitData:", splitData)
+    const podcastID= splitData?.at(0)
+   if(splitData) dispatch( fetchIndivdualPodcast(podcastID) )
+
+
+  },[lastListenState?.episodeID])
 
   return (
     <Fragment>
@@ -53,77 +143,21 @@ export default function BottomAppBar() {
         sx={{
           backgroundColor: "rgba(0,0,0,0)",
           top: "auto",
-          bottom: 0,
+        bottom: 0,
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
-            boxShadow:0,
+          boxShadow: 0,
           justifyContent: "space-between",
           padding: "10px", // Add some padding around the components
         }}
       >
         {/* Card with Episode Information */}
-        <Card
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            maxWidth: "30%", // Limit the size to 30% of the bottom app bar
-            borderRadius: "25px",
-            padding: "8px",
-            backgroundColor: currentTheme.primary,
-            color: currentTheme.secondary,
-            boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.1)",
-          }}
-        >
-          {episodeTitle && <CardMedia
-            component='img'
-            sx={{ width: 60, height: 60, borderRadius: "12px" }}
-            image={podcastImage || "src/assets/images/SCR-20240918-lwpk.png"}
-            alt='Episode cover'
-          />}
-          <CardContent
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              overflow: "hidden", // Hide overflow content
-              marginLeft: "8px",
-              whiteSpace: "nowrap", // Prevent wrapping of text
-              textOverflow: "ellipsis", // Use ellipsis for overflow text
-            }}
-          >
-            <Typography
-              component='div'
-              variant='body1'
-              sx={{
-                overflow: "hidden",
-                whiteSpace: "nowrap",
-                textOverflow: "elispsis", // Apply ellipsis
-                animation: !episodeTitle || episodeTitle.length > 20 ? `scroll 10s linear infinite` : "none",
-                "@keyframes scroll": {
-                  from: { transform: "translateX(0)" },
-                  to: { transform: "translateX(-100%)" },
-                },
-              }}
-            >
-              {episodeTitle || "No Episode"}
-            </Typography>
-            <Typography
-              variant='subtitle2'
-              component='div'
-              sx={{
-                color: "text.secondary",
-                overflow: "hidden",
-                whiteSpace: "nowrap",
-                textOverflow: "ellipsis",
-              }}
-            >
-              {podcastTitle || "No Podcast"}
-            </Typography>
-          </CardContent>
-        </Card>
-
+        <CurrentPlayingBadge
+          episodeTitle={episodeTitle}
+          podcastImage={podcastImage}
+          podcastTitle={podcastTitle}
+        />
         {/* React Player */}
         {url ? (
           <ReactPlayer
@@ -132,6 +166,8 @@ export default function BottomAppBar() {
             playing={playing}
             controls={true} // Show the default ReactPlayer controls
             onProgress={handleProgress}
+            onPlay={handlePlay}
+            onEnded={handleEnd}
             height='60px'
             width='65%' // Adjust the player width
             style={{ marginLeft: "10px", flexGrow: 1 }}

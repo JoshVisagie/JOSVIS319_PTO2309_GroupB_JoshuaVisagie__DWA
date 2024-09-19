@@ -4,6 +4,7 @@
  * 
  * 
  */
+import { duration } from "@mui/material";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 /**
@@ -16,6 +17,7 @@ interface MediaState{
     url: string |null,
     episodeTitle: string |null,
     podcastTitle: string |null,
+    podcastID:string|null,
     podcastImage: string |null,
     playing: boolean,
     isLiked:boolean,
@@ -31,7 +33,9 @@ interface SetMediaAction{
     url: string |null,
     episodeTitle: string |null,
     podcastTitle: string |null,
+    podcastID: string|null,
     podcastImage: string |null,
+   
 }
 /**
  * Sets the initial state of the page to home
@@ -69,6 +73,8 @@ const mediaSlice = createSlice({
         state.podcastTitle = action.payload.podcastTitle;
         state.episodeTitle = action.payload.episodeTitle;
         state.podcastImage= action.payload.podcastImage;
+        state.podcastID= action.payload.podcastID;
+        
 
       },
       playPause(state, action: PayloadAction<boolean>) {
@@ -77,10 +83,13 @@ const mediaSlice = createSlice({
       setTime(state, action:PayloadAction<number>){
         console.log(action.payload)
         state.timePlaying = action.payload
+      },
+      setDuration(state, action:PayloadAction<number>){
+        state.duration = action.payload;
       }
     }
   });
   
-  export const { setMedia, playPause,setTime } = mediaSlice.actions;
+  export const { setMedia, playPause,setTime, setDuration } = mediaSlice.actions;
   export default mediaSlice.reducer;
   
