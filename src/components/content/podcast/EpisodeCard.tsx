@@ -4,8 +4,7 @@ import React, { useState, useEffect } from "react";
 import IconButton from "@mui/material/IconButton";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+
 import Grid from "@mui/joy/Grid";
 
 import { useAppSelector, useAppDispatch } from "../../../reduxHooks";
@@ -48,9 +47,8 @@ const EpisodeCard: React.FC<EpisodeCardProps> = (props) => {
   const isMediaPlaying = useAppSelector((state) => state.media.playing);
   const dispatch = useAppDispatch();
   const email = useAppSelector((state) => state.userData.user?.email);
-  const liked = useAppSelector(
-    (state) => state.userPodcastData.userPodcastData?.likedPodcast
-  );
+  
+  const id = `${podcastID}-${season}-${episode}`
   // Handles play and pause functionality
   const handlePlayPause = () => {
     if (media.id !== id) {

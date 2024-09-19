@@ -1,7 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../reduxHooks";
 import { fetchUserPodcastData } from "../../../state/userData/userPodcastDataSlice";
 import { selectLikedPodcast } from "../../../state/userData/userPodcastDataSlice";
+import { Card, Box, Paper } from "@mui/material";
+import LikedPodcastCard from "./LikedPodcastCard";
+
+
 
 const LikedContent = () => {
   const dispatch = useAppDispatch();
@@ -10,7 +14,12 @@ const LikedContent = () => {
   const likedEpisodes = useAppSelector(selectLikedPodcast);
   const email = useAppSelector((state) => state.userData.user?.email);
   const allPods = useAppSelector((state) => state.podcasts.data); // All podcasts data
-  
+
+
+  // State to store the selected podcast
+  const [selectedPodcast, setSelectedPodcast] = useState<{ podcastID: string; likedShows: Liked[] } | null>(null);
+
+  // Interface for Liked podcasts
   interface Liked {
     episodeID: string;
     podcastID: string;
@@ -18,7 +27,7 @@ const LikedContent = () => {
     episode: string;
     likedAt: string;
   }
-  
+
   interface GroupedByPodcast {
     [podcastID: string]: Liked[];
   }
@@ -43,6 +52,18 @@ const LikedContent = () => {
   // Group liked episodes by podcastID
   const groupedByPodcast = groupLikedByPodcast(likedEpisodes);
 
+  // Handle podcast card click
+  const handleClick = (podcastID: string) => {
+    const likedShows = groupedByPodcast[podcastID]; // Get liked shows for the podcastID
+    setSelectedPodcast({ podcastID, likedShows }); // Set the selected podcast state
+    console.log("handleclick props",podcastID, likedShows)
+  };
+
+  // Handle closing the modal
+  const handleClose = () => {
+    setSelectedPodcast(null); // Reset the selected podcast to close the modal
+  };
+
   return (
     <div>
       <h1>Liked Podcasts</h1>
@@ -54,20 +75,39 @@ const LikedContent = () => {
         if (!matchingPodcast) return null;
 
         return (
-          <div key={podcastID} className="podcast-card">
-            <h2>{matchingPodcast.title}</h2>
-            <p>Description: {matchingPodcast.description}</p>
-            <h3>Liked Episodes:</h3>
-            <ul>
-              {likedPodcasts.map((episode) => (
-                <li key={episode.episodeID}>
-                  Season {episode.season}, Episode {episode.episode} - Liked on {episode.likedAt}
-                </li>
-              ))}
-            </ul>
-          </div>
+          <Card
+            key={podcastID}
+            className="podcast-card"
+            onClick={() => handleClick(podcastID)} // Pass podcastID on click
+            sx={{
+              margin: 3,
+              padding: "5px",
+              display: "flex",
+              cursor: "pointer",
+            }}
+          >
+            <Box
+              sx={{
+                padding: 3,
+                width: "75%",
+              }}
+            >
+              <h2>{matchingPodcast.title}</h2>
+              <h3>Liked Episodes: {groupedByPodcast[podcastID].length}</h3>
+            </Box>
+            <img src={matchingPodcast.image} height={120} alt={matchingPodcast.title} />
+          </Card>
         );
       })}
+
+      {/* Conditionally render the LikedPodcastCard when a podcast is selected */}
+      {selectedPodcast && (
+        <LikedPodcastCard
+          likedShows={selectedPodcast.likedShows}
+          podcastID={selectedPodcast.podcastID}
+          onClose={handleClose}
+        />
+      )}
     </div>
   );
 };

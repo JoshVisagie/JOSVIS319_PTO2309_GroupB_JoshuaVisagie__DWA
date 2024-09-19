@@ -4,67 +4,67 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import PauseIcon from "@mui/icons-material/Pause";
-import SkipNextIcon from "@mui/icons-material/SkipNext";
-import { supabase } from "../../../supabaseClient";
-
 import AppBar from "@mui/material/AppBar";
 import CssBaseline from "@mui/material/CssBaseline";
 
 import { useAppDispatch, useAppSelector } from "../../../reduxHooks";
-import { playPause, setTime } from "../../../state/mediaPlayer/mediaSlice"; // Action to toggle play/pause state
+import { setTime } from "../../../state/mediaPlayer/mediaSlice"; // Action to set progress time
 
 import ReactPlayer from "react-player";
-
-import { useRef , useEffect, useState} from "react";
-
+import { useRef } from "react";
 
 export default function BottomAppBar() {
-
-   
-
-
   const playerRef = useRef<ReactPlayer | null>(null);
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const media = useAppSelector((state) => state.media);
-  const { id, url, episodeTitle, podcastTitle, playing, timePlaying, podcastImage } = media;
-  
+  const { url, episodeTitle, podcastTitle, playing, timePlaying, podcastImage } = media;
 
-  const handlePlayPause = () => {
-    dispatch(playPause(!playing)); // Toggle play/pause state in the Redux store
+  const handleProgress = (progress: { playedSeconds: number }) => {
+    const currentTime = Math.floor(progress.playedSeconds);
+    dispatch(setTime(currentTime));
   };
-
-  const handleProgress=( progress: { playedSeconds: number })=>{
-    const currentTime = Math.floor(progress.playedSeconds)
-    dispatch(setTime(currentTime)) ;
-      
-  }
-
-
 
   return (
     <Fragment>
       <CssBaseline />
+      
+      
       <AppBar position='fixed' color='primary' sx={{ top: "auto", bottom: 0 }}>
-        <Card sx={{ 
+        <Card
+          sx={{
             display: "flex",
-            height:"100px" ,
-            alignItems: "center", 
-            justifyContent: "space-around" }}>
-          
+            height: "100px",
+            alignItems: "center",
+            justifyContent: "space-around",
+          }}
+        >
+            <Box sx={{ display: "flex", flexDirection: "row", flex: 1, alignItems: "center" }}>
+            <CardContent
+              sx={{
+                maxWidth: "300px",
+                flex: "1 0 auto",
+              }}
+            >
+              <Typography component='div' variant='p'>
+                {episodeTitle || "No Episode"}
+              </Typography>
+              <Typography variant='subtitle1' component='div' sx={{ color: "text.secondary" }}>
+                {podcastTitle || "No Podcast"}
+              </Typography>
+            </CardContent>
+           
+          </Box>
           {url ? (
             <ReactPlayer
+              ref={playerRef}
               url={url}
-              playing={playing} 
-              controls={false} 
+              playing={playing}
+              controls={true} // Show the default ReactPlayer controls
               onProgress={handleProgress}
-              height="0px"
-              width="0px"
+              height="50px"
+              width="100%" // Make sure it takes up the available space
               style={{ marginLeft: "16px" }}
             />
           ) : (
@@ -76,50 +76,11 @@ export default function BottomAppBar() {
           <CardMedia
             component='img'
             sx={{ width: "100px", height: "100px", padding: 1 }}
-            image={podcastImage}
+            image={media.podcastImage?podcastImage: "src/assets/images/SCR-20240918-lwpk.png"}
             alt='Episode cover'
           />
-        
-          <Box sx={{ display: "flex", flexDirection: "row", flex: 1, alignItems: "center" }}>
-            <CardContent sx={{
-                maxWidth:"300px",
-                flex: "1 0 auto" }}>
-              <Typography component='div' variant='h5'>
-                {episodeTitle || "No Episode"}
-              </Typography>
-              <Typography
-                variant='subtitle1'
-                component='div'
-                sx={{ color: "text.secondary" }}
-              >
-                {podcastTitle || "No Podcast"}
-              </Typography>
-            </CardContent>
-            <Box sx={{ display: "flex", alignItems: "center", pl: 1, pb: 1 }}>
-              <IconButton aria-label='previous'>
-                {theme.direction === "rtl" ? (
-                  <SkipNextIcon />
-                ) : (
-                  <SkipPreviousIcon />
-                )}
-              </IconButton>
-              <IconButton aria-label='play/pause' onClick={handlePlayPause}>
-                {playing ? (
-                  <PauseIcon sx={{ height: 38, width: 38 }} />
-                ) : (
-                  <PlayArrowIcon sx={{ height: 38, width: 38 }} />
-                )}
-              </IconButton>
-              <IconButton aria-label='next'>
-                {theme.direction === "rtl" ? (
-                  <SkipPreviousIcon />
-                ) : (
-                  <SkipNextIcon />
-                )}
-              </IconButton>
-              <h3>{timePlaying}</h3>
-            </Box>
-          </Box>
+
+          
         </Card>
       </AppBar>
     </Fragment>
