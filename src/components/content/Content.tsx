@@ -8,7 +8,7 @@ import SearchContent from "./search/SearchContent";
 import LikedContent from "./likedContent/LikedContent";
 import { useEffect } from "react";
 import { Box } from "@mui/material";
-
+import SettingsContent from "./settings/SettingsContent";
 import { togglePage } from "../../state/display/displaySlice";
 /**
  * A component for handling what will be shown on the page depending on what the state is
@@ -37,6 +37,7 @@ const Content = () => {
       {nav == "home" && <PodcastList />}
       {nav == "search" && <SearchContent />}
       {nav== "liked" &&<LikedContent/>}
+      {nav == "settings" &&<SettingsContent/>}
       <Box sx={{marginTop:"130px"}} ></Box>
     </div>
   );

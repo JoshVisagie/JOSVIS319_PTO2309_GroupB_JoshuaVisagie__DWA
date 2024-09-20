@@ -79,6 +79,7 @@ export const updateListenTime = createAsyncThunk(
     userEmail: string;
     listen_time
   }) => {
+    console.log("🚀 ~ listen_time:", listen_time)
     const { data, error } = await supabase
       .from("user_podcast_data")
       .update({ listen_time: listen_time })
