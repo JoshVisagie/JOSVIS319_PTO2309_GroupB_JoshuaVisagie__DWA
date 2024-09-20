@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "./reduxHooks";
 import { logIn } from "./state/userData/userDataSlice";
 import { fetchUserPodcastData } from "./state/userData/userPodcastDataSlice";
 import { setFormattedLiked } from "./state/userData/formattedDataSlice";
-
+import { Box } from "@mui/material";
 /**
  * A function for retrieving the user from Supabase Auth
  *
@@ -122,7 +122,7 @@ function Fetch() {
     fetchPodcastDataAndCheckUser();
   }, [dispatch, email, loggedIn]);
   
-  return <div>{email ? "" : "notLoggedin"}</div>;
+  return <Box sx={{backgroundColor:"#E64A19", display:"flex", justifyContent:"center", color:"#F9F7F7"}}>{email ? "" : "Not Logged In"}</Box>;
 }
 
 export default Fetch;
