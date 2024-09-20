@@ -55,6 +55,7 @@ const PodcastDetailsModal: React.FC<PodcastDetailsModalProps> = ({
           <PodInfo
           id={podcastID}
           />
+      <Button onClick={onClose}> close</Button>
         </Card>
       </Box>
     </Modal>

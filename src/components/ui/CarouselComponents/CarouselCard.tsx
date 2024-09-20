@@ -38,24 +38,22 @@ const CarouselCard = (props: { cardColor: string }): JSX.Element => {
   /** Image URL and title of the selected podcast */
   const imageUrl = currentPodcast?.image ?? "";
   const title = currentPodcast?.title ?? "Unknown Title";
-  const id = currentPodcast?.id?? ""
+  const id = currentPodcast?.id ?? "";
   const [modalOpen, setModalOpen] = useState(false);
 
-
-  const handleClick=()=>{
-    setModalOpen(currentState=>!currentState);
-  }
-  const handleClose = () => {
-    console.log("closed")
-    setModalOpen(currentState=>!currentState);
-    console.log(modalOpen)
+  const handleClick = () => {
+    if (!modalOpen) setModalOpen(true);
   };
-  useEffect(() => {
-    console.log("Modal open state changed:", modalOpen);
-  }, [modalOpen]);
+
+  const handleClose = () => {
+    console.log("closed");
+    setModalOpen(!modalOpen);
+    console.log(modalOpen);
+  };
+
   return (
     <Card
-    onClick = {handleClick}
+      onClick={handleClick}
       sx={{
         position: "relative",
         width: "100%",
@@ -66,8 +64,6 @@ const CarouselCard = (props: { cardColor: string }): JSX.Element => {
       }}
     >
       <Box
-         
-
         sx={{
           position: "absolute",
           top: 0,
@@ -107,18 +103,17 @@ const CarouselCard = (props: { cardColor: string }): JSX.Element => {
             fontWeight: "bold",
             overflowY: "scroll",
             fontSize: { xs: "1.5rem", sm: "2rem" },
-
           }}
         >
           {title}
         </Typography>
       </Box>
-     {modalOpen && <PodcastDetailsModal
-      podcastID={id}
-      open={modalOpen}
-      onClose={handleClick}
-      podcastTitle={title}
-      />}
+      <PodcastDetailsModal
+        podcastID={id}
+        open={modalOpen}
+        onClose={handleClose}
+        podcastTitle={title}
+      />
     </Card>
   );
 };
