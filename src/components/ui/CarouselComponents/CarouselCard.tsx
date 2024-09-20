@@ -106,6 +106,8 @@ const CarouselCard = (props: { cardColor: string }): JSX.Element => {
             color: "white",
             fontWeight: "bold",
             overflowY: "scroll",
+            fontSize: { xs: "1.5rem", sm: "2rem" },
+
           }}
         >
           {title}
