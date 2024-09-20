@@ -42,12 +42,10 @@ interface Episode {
  */
 const EpisodeCard: React.FC<EpisodeCardProps> = (props) => {
   const { podcastID, podcastTitle, episode, podcastImage, season} = props;
-  const [isLiked, setIsLiked] = useState(false);
   const audioRef = React.useRef<HTMLAudioElement>(null);
   const media = useAppSelector((state) => state.media);
   const isMediaPlaying = useAppSelector((state) => state.media.playing);
   const dispatch = useAppDispatch();
-  const email = useAppSelector((state) => state.userData.user?.email);
   const loggedIn = useAppSelector(state=>state.userData.loggedIn)
 
   const listenTime = useAppSelector(state=>state.userPodcastData.userPodcastData?.listen_time)
@@ -61,7 +59,7 @@ const EpisodeCard: React.FC<EpisodeCardProps> = (props) => {
    
     const foundListenPodcast = listenTime?.find(episode=> episode.episodeID == id)
 
-    if(foundListenPodcast){
+    if(foundListenPodcast && foundListenPodcast.timePlayed){
       setCurrentEpisodeListenTime(foundListenPodcast.timePlayed)
       setCurrentEpisodeListenFin(foundListenPodcast.isDone)
     }else{
