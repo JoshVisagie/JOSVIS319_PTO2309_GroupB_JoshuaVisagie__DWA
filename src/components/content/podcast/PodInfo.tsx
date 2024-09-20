@@ -19,17 +19,6 @@ import Stack from "@mui/joy/Stack";
 // component imports
 import EpisodeCard from "./EpisodeCard";
 
-/**
- * Interface representing a single episode
- */
-interface Episode {
-  id: string; // Unique identifier for the episode
-  title: string; // Title of the episode
-  description: string; // Description of the episode
-  episode: number; // Episode number
-  season: number//Season number
-  file: string; // URL for the audio file of the episode
-}
 
 
 
@@ -103,10 +92,11 @@ const PodInfo: React.FC<PodInfoProps> = (props) => {
           {seasons
             .find((season) => season.season === selectedSeason)
             ?.episodes.map((episode) => (
+              
               <EpisodeCard
                 key={episode.episode}
-                podcastTitle={data.data.title}
-                podcastImage={data.data.image}
+                podcastTitle={podcastData.title}
+                podcastImage={podcastData.image}
                 podcastID={id}
                 episode={episode}
                 season ={selectedSeason}

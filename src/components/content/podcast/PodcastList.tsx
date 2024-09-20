@@ -6,7 +6,6 @@ import {
   fetchPodcasts,
   selectSortedPodcasts,
   setSortType,
-  SortType,
 } from "../../../state/podcasts/podcastsSlice";
 //mui imports
 import Select, { SelectChangeEvent } from "@mui/material/Select";

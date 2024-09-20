@@ -2,7 +2,11 @@ import { Card } from "@mui/material";
 import PodcastDetailsModal from "../../PodcastModal";
 import { useState } from "react";
 
-const PodcastCardSmall = (props) => {
+interface PropsType{
+    podcastTitle: string
+     podcastID: string
+}
+const PodcastCardSmall = (props :PropsType) => {
   const [modalOpen, setModalOpen] = useState(false);
 
   const { podcastTitle, podcastID } = props;
