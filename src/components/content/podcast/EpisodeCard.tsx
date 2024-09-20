@@ -11,7 +11,7 @@ import { useAppSelector, useAppDispatch } from "../../../reduxHooks";
 import { playPause, setMedia } from "../../../state/mediaPlayer/mediaSlice";
 
 import LikeButton from "../buttons/LikeButton";
-import { Box, duration } from "@mui/material";
+import { Box } from "@mui/material";
 
 // Props interface for EpisodeCard
 interface EpisodeCardProps {
