@@ -158,7 +158,7 @@ export default function BottomAppBar() {
 
   useEffect(() => {
     const LoadPrevMedia = () => {
-      if (!media.id) {
+      if (!media.id && allPodcasts ) {
         const episodeID = lastListenState?.episodeID;
         if (episodeID) {
           const splitData = episodeID.split("-");
