@@ -30,7 +30,7 @@ const SettingsContent = () => {
   const handleDeletion = () => {
     setOpen(false);
    
-    if (deletion === "listen") {
+    if (deletion === "listen" && email) {
         dispatch(updateLastListenedPodcast({userEmail: email,last_listen:null}))
         dispatch(updateListenTime({userEmail:email,listen_time:[{}]}))
     }
