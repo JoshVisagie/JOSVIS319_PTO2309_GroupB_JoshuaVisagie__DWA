@@ -9,7 +9,7 @@ import {
   setTime,
   setDuration,
   setMedia,
-} from "../../../state/mediaPlayer/mediaSlice"; 
+} from "../../../state/mediaPlayer/mediaSlice";
 import ReactPlayer from "react-player";
 import currentTheme from "../../../style";
 import { useEffect } from "react";
@@ -43,15 +43,15 @@ const checkCurrent = (playerRef, dispatch, listenedState, media) => {
 export default function BottomAppBar() {
   const playerRef = useRef<ReactPlayer | null>(null);
 
-  const theme = useTheme();
   const dispatch = useAppDispatch();
   const individualPodcast = useAppSelector(
     (state) => state.individualPodcast.data
   );
-  const loggedIn = useAppSelector(state=>state.userData.loggedIn)
+  const loading = useAppSelector(state=> state.podcasts.isLoading)
+  const loggedIn = useAppSelector((state) => state.userData.loggedIn);
   const allPodcasts = useAppSelector((state) => state.podcasts.data);
   const media = useAppSelector((state) => state.media);
- 
+
   const listenedState = useAppSelector(
     (state) => state.userPodcastData.userPodcastData?.listen_time
   );
@@ -114,9 +114,9 @@ export default function BottomAppBar() {
     );
 
     const dataToUpdate = updateListnedToData(data);
-     //@ts-expect-error will have email
+    //@ts-expect-error will have email
     dispatch(updateListenTime({ userEmail: email, listen_time: dataToUpdate }));
-     //@ts-expect-error will have email
+    //@ts-expect-error will have email
     dispatch(fetchUserPodcastData(email));
   };
 
@@ -151,7 +151,7 @@ export default function BottomAppBar() {
 
   useEffect(() => {
     const LoadPrevMedia = () => {
-      if (!media.id && allPodcasts) {
+      if (!media.id && allPodcasts && !loading) {
         const episodeID = lastListenState?.episodeID;
         if (episodeID) {
           const splitData = episodeID.split("-");
@@ -214,90 +214,91 @@ export default function BottomAppBar() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-
   return (
     <Fragment>
       <CssBaseline />
-  {  loggedIn &&  <AppBar
-        position='fixed'
-        color='primary'
-        sx={{
-          background:
-            "linear-gradient(to top, rgba(231, 241, 255, 1) 0%,rgba(255,255,255,0) 100%)",
-          backdropFilter: "blur(1px)",
-          top: "auto",
-          bottom: 0,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          boxShadow: 0,
-          justifyContent: "space-between",
-          padding: "10px", // Add some padding around the components
-        }}
-      >
-        <Box sx={{ width: "100%", display: "flex", flexDirection: "row" }}>
-          {/* React Player */}
-{    width > 500 &&      <Box
-            sx={{
-              backgroundColor: currentTheme.primary,
-              width: "60px",
-              borderRadius: "50%",
-              overflow: "hidden",
-            }}
-          >
-            {media.podcastImage && (
-              <img
-                src={media.podcastImage}
-                style={{
-                  objectFit: "contain",
-                  width: "100%",
-                  height: "100%",
+      {loggedIn && (
+        <AppBar
+          position='fixed'
+          color='primary'
+          sx={{
+            background:
+              "linear-gradient(to top, rgba(231, 241, 255, 1) 0%,rgba(255,255,255,0) 100%)",
+            backdropFilter: "blur(1px)",
+            top: "auto",
+            bottom: 0,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            boxShadow: 0,
+            justifyContent: "space-between",
+            padding: "10px", // Add some padding around the components
+          }}
+        >
+          <Box sx={{ width: "100%", display: "flex", flexDirection: "row" }}>
+            {/* React Player */}
+            {width > 500 && (
+              <Box
+                sx={{
+                  backgroundColor: currentTheme.primary,
+                  width: "60px",
+                  borderRadius: "50%",
+                  overflow: "hidden",
                 }}
-                alt='Podcast'
-              />
+              >
+                {media.podcastImage && (
+                  <img
+                    src={media.podcastImage}
+                    style={{
+                      objectFit: "contain",
+                      width: "100%",
+                      height: "100%",
+                    }}
+                    alt='Podcast'
+                  />
+                )}
+              </Box>
             )}
-          </Box>}
-          {url ? (
-            <ReactPlayer
-              ref={playerRef}
-              url={url}
-              playing={playing}
-              controls={true} // Show the default ReactPlayer controls
-              onProgress={handleProgress}
-              onPlay={handlePlay}
-              onEnded={handleEnd}
-              height='60px'
-              width='65%' // Adjust the player width
-              style={{ flexGrow: 1 }}
-              onReady={handleReady}
-            />
-          ) : (
-            <Typography
-              variant='h6'
-              sx={{ color: currentTheme.primary, padding: 2, width: "65%" }}
-            >
-              No episode selected
-            </Typography>
-          )}
-          <Box
-            sx={{
-              backgroundColor: currentTheme.primary,
-              width: "60px",
-              borderRadius: "50%",
-              display: "flex",
-              alignContent: "center",
-              justifyContent: "center",
-            }}
-          >
-            
+            {url ? (
+              <ReactPlayer
+                ref={playerRef}
+                url={url}
+                playing={playing}
+                controls={true} // Show the default ReactPlayer controls
+                onProgress={handleProgress}
+                onPlay={handlePlay}
+                onEnded={handleEnd}
+                height='60px'
+                width='65%' // Adjust the player width
+                style={{ flexGrow: 1 }}
+                onReady={handleReady}
+              />
+            ) : (
+              <Typography
+                variant='h6'
+                sx={{ color: currentTheme.primary, padding: 2, width: "65%" }}
+              >
+                No episode selected
+              </Typography>
+            )}
+            <Box
+              sx={{
+                backgroundColor: currentTheme.primary,
+                width: "60px",
+                borderRadius: "50%",
+                display: "flex",
+                alignContent: "center",
+                justifyContent: "center",
+              }}
+            ></Box>
           </Box>
-        </Box>
 
-        <CurrentPlayingBadge
-          episodeTitle={episodeTitle}
-          podcastTitle={podcastTitle}
-        />
-      </AppBar>}
+          <CurrentPlayingBadge
+            episodeTitle={episodeTitle}
+            podcastTitle={podcastTitle}
+          />
+        </AppBar>
+      )}
     </Fragment>
   );
 }
