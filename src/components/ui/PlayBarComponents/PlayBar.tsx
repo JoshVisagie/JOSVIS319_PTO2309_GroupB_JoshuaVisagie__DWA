@@ -237,7 +237,7 @@ export default function BottomAppBar() {
         >
           <Box sx={{ width: "100%", display: "flex", flexDirection: "row" }}>
             {/* React Player */}
-            {width > 500 && (
+            
               <Box
                 sx={{
                   backgroundColor: currentTheme.primary,
@@ -258,7 +258,7 @@ export default function BottomAppBar() {
                   />
                 )}
               </Box>
-            )}
+           
             {url ? (
               <ReactPlayer
                 ref={playerRef}
@@ -276,11 +276,12 @@ export default function BottomAppBar() {
             ) : (
               <Typography
                 variant='h6'
-                sx={{ color: currentTheme.primary, padding: 2, width: "65%" }}
+                sx={{ color: currentTheme.primary, padding: 2, width: "100%" }}
               >
                 No episode selected
               </Typography>
             )}
+            {width > 500 && (
             <Box
               sx={{
                 backgroundColor: currentTheme.primary,
@@ -290,7 +291,7 @@ export default function BottomAppBar() {
                 alignContent: "center",
                 justifyContent: "center",
               }}
-            ></Box>
+            ></Box>)}
           </Box>
 
           <CurrentPlayingBadge
