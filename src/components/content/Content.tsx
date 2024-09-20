@@ -23,7 +23,7 @@ const Content = () => {
       {nav == "home" && <PodcastList />}
       {nav == "search" && <SearchContent />}
       {nav== "liked" &&<LikedContent/>}
-      <Box sx={{marginTop:"100px"}} >""</Box>
+      <Box sx={{marginTop:"100px"}} ></Box>
     </div>
   );
 };

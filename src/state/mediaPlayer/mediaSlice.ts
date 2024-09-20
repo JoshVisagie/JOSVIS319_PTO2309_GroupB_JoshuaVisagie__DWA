@@ -67,12 +67,14 @@ const mediaSlice = createSlice({
     initialState,
     reducers: {
       setMedia(state, action: PayloadAction<SetMediaAction>) {
-        state.url = action.payload.url;
+
+        state.url=null
         state.id = action.payload.id;
         state.podcastTitle = action.payload.podcastTitle;
         state.episodeTitle = action.payload.episodeTitle;
         state.podcastImage= action.payload.podcastImage;
         state.podcastID= action.payload.podcastID;
+        state.url = action.payload.url;
         
 
       },
