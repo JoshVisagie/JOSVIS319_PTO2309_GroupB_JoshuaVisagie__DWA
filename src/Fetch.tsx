@@ -3,7 +3,6 @@ import { supabase } from "./supabaseClient";
 import { useAppDispatch, useAppSelector } from "./reduxHooks";
 import { logIn } from "./state/userData/userDataSlice";
 import { fetchUserPodcastData } from "./state/userData/userPodcastDataSlice";
-import { setFormattedLiked } from "./state/userData/formattedDataSlice";
 import { Box } from "@mui/material";
 /**
  * A function for retrieving the user from Supabase Auth
@@ -22,7 +21,7 @@ const getSupabaseUser = async () => {
   }
 };
 
-const checkIfUserExists  = async (email) => {
+const checkIfUserExists  = async (email:string) => {
     const { data, error } = await supabase
       .from('user_podcast_data')
       .select('email')
@@ -37,7 +36,7 @@ const checkIfUserExists  = async (email) => {
     return data ? true : false;
   };
 
-  const createNewUser = async (email) => {
+  const createNewUser = async (email:string) => {
     const { data, error } = await supabase
       .from('user_podcast_data')
       .insert([
@@ -62,9 +61,7 @@ function Fetch() {
   const dispatch = useAppDispatch();
   const loggedIn = useAppSelector((state) => state.userData.loggedIn);
   const email = useAppSelector((state) => state.userData.user?.email);
-  const userPodcastData = useAppSelector(
-    (state) => state.userPodcastData.userPodcastData
-  );
+
 
   useEffect(() => {
     const fetchUser = async () => {
