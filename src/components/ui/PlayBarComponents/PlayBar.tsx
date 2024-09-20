@@ -27,7 +27,6 @@ episodeID: string
 isDone : boolean
 timePlayed : number
 }
-//@ts-expect-error this works
 const checkCurrent = (playerRef, dispatch, listenedState, media) => {
   if (playerRef.current) {
     dispatch(setDuration(playerRef.current.getDuration()));
@@ -115,14 +114,11 @@ export default function BottomAppBar() {
     };
 
     dispatch(
-      //@ts-expect-error will have email
       updateLastListenedPodcast({ userEmail: email, last_listen: data })
     );
 
     const dataToUpdate = updateListnedToData(data);
-    //@ts-expect-error will have email
     dispatch(updateListenTime({ userEmail: email, listen_time: dataToUpdate }));
-    //@ts-expect-error will have email
     dispatch(fetchUserPodcastData(email));
   };
 
@@ -188,7 +184,6 @@ export default function BottomAppBar() {
                   podcastID: lastListenPodID,
                   podcastImage: selectedPod?.image,
                 };
-                //@ts-expect-error can't get here without data
                 dispatch(setMedia(setMediaAction));
                 console.log(
                   "🚀 ~ LoadPrevMedia ~ media:",
@@ -205,7 +200,6 @@ export default function BottomAppBar() {
 
   const handleReady = () => {
     if (!oldMediaHasLoaded && playerRef.current) {
-      //@ts-expect-error this works
       playerRef.current?.seekTo(lastListenState.timePlayed, "seconds");
 
       setOldMediaHasLoaded(true);
