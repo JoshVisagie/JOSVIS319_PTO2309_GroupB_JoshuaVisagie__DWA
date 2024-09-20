@@ -31,9 +31,9 @@ interface SetMediaAction{
     id:string|null
     url: string |null,
     episodeTitle: string |null,
-    podcastTitle: string |null,
+    podcastTitle: string |null ,
     podcastID: string|null,
-    podcastImage: string |null,
+    podcastImage: string |null ,
    
 }
 /**

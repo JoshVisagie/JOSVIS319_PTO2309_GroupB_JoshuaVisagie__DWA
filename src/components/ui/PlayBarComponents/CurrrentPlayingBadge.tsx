@@ -5,8 +5,8 @@ import CssBaseline from "@mui/material/CssBaseline";
 import currentTheme from "../../../style";
 
 interface PropsType{
-  episodeTitle:string
-  podcastTitle:string
+  episodeTitle:string | null
+  podcastTitle:string | null
 }
 
  const CurrentPlayingBadge=(props:PropsType) =>{

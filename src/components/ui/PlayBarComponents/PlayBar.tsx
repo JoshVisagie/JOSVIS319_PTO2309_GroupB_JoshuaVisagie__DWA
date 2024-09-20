@@ -109,11 +109,14 @@ export default function BottomAppBar() {
     };
 
     dispatch(
+      //@ts-expect-error will have email
       updateLastListenedPodcast({ userEmail: email, last_listen: data })
     );
 
     const dataToUpdate = updateListnedToData(data);
+     //@ts-expect-error will have email
     dispatch(updateListenTime({ userEmail: email, listen_time: dataToUpdate }));
+     //@ts-expect-error will have email
     dispatch(fetchUserPodcastData(email));
   };
 
