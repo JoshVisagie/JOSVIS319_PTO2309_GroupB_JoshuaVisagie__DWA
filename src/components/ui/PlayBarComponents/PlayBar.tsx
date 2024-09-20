@@ -1,4 +1,3 @@
-import { useTheme } from "@mui/material/styles";
 import { Fragment, useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -23,12 +22,19 @@ import { ListenData } from "../../../state/userData/userPodcastDataSlice";
 
 import CurrentPlayingBadge from "./CurrrentPlayingBadge";
 
+interface Episode{
+episodeID: string
+isDone : boolean
+timePlayed : number
+}
+//@ts-expect-error this works
 const checkCurrent = (playerRef, dispatch, listenedState, media) => {
   if (playerRef.current) {
     dispatch(setDuration(playerRef.current.getDuration()));
 
     if (listenedState) {
-      const potentialData = listenedState.find((episode) => {
+      const potentialData = listenedState.find((episode:Episode) => {
+        console.log("🚀 ~ potentialData ~ episode:", episode)
         return episode.episodeID === media.id;
       });
 
@@ -182,7 +188,7 @@ export default function BottomAppBar() {
                   podcastID: lastListenPodID,
                   podcastImage: selectedPod?.image,
                 };
-
+                //@ts-expect-error can't get here without data
                 dispatch(setMedia(setMediaAction));
                 console.log(
                   "🚀 ~ LoadPrevMedia ~ media:",
