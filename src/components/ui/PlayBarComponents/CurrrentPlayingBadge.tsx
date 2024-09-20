@@ -1,16 +1,17 @@
 import { Fragment } from "react";
 import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import CssBaseline from "@mui/material/CssBaseline";
 import currentTheme from "../../../style";
-import { Box } from "@mui/material";
 
+interface PropsType{
+  episodeTitle:string
+  podcastTitle:string
+}
 
- const CurrentPlayingBadge=(props) =>{
+ const CurrentPlayingBadge=(props:PropsType) =>{
   
- const {episodeTitle, podcastImage, podcastTitle } =props
+ const {episodeTitle, podcastTitle } =props
 
  
   return (

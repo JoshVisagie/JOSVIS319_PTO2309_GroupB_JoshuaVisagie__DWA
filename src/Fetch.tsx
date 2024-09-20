@@ -21,47 +21,43 @@ const getSupabaseUser = async () => {
   }
 };
 
-const checkIfUserExists  = async (email:string) => {
-    const { data, error } = await supabase
-      .from('user_podcast_data')
-      .select('email')
-      .eq('email', email)
-      .single(); // `single` ensures only one row is returned, or null if not found
-  
-    if (error) {
-      console.error('Error checking user existence:', error);
-      return false;
-    }
-    
-    return data ? true : false;
-  };
+const checkIfUserExists = async (email: string) => {
+  const { data, error } = await supabase
+    .from("user_podcast_data")
+    .select("email")
+    .eq("email", email)
+    .single(); // `single` ensures only one row is returned, or null if not found
 
-  const createNewUser = async (email:string) => {
-    const { data, error } = await supabase
-      .from('user_podcast_data')
-      .insert([
-        {
-          email: email,
-          listen_time: [{}], // Empty array for listen times
-          liked_podcasts: [], // Empty array for liked episodes
-          last_listen: "" // Empty last listen field
-        }
-      ]);
-  
-    if (error) {
-      console.error('Error creating new user:', error);
-      return null;
-    }
-  
-    return data;
-  };
+  if (error) {
+    console.error("Error checking user existence:", error);
+    return false;
+  }
 
+  return data ? true : false;
+};
+
+const createNewUser = async (email: string) => {
+  const { data, error } = await supabase.from("user_podcast_data").insert([
+    {
+      email: email,
+      listen_time: [{}], // Empty array for listen times
+      liked_podcasts: [], // Empty array for liked episodes
+      last_listen: "", // Empty last listen field
+    },
+  ]);
+
+  if (error) {
+    console.error("Error creating new user:", error);
+    return null;
+  }
+
+  return data;
+};
 
 function Fetch() {
   const dispatch = useAppDispatch();
   const loggedIn = useAppSelector((state) => state.userData.loggedIn);
   const email = useAppSelector((state) => state.userData.user?.email);
-
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -88,8 +84,6 @@ function Fetch() {
     }
   }, [dispatch, loggedIn, email]);
 
-
-
   useEffect(() => {
     const fetchPodcastDataAndCheckUser = async () => {
       try {
@@ -105,8 +99,8 @@ function Fetch() {
             const newUser = await createNewUser(email);
             if (!newUser) {
               console.error("Failed to create new user.");
-              
-              dispatch(fetchUserPodcastData(email))
+
+              dispatch(fetchUserPodcastData(email));
               return;
             }
           }
@@ -118,8 +112,19 @@ function Fetch() {
 
     fetchPodcastDataAndCheckUser();
   }, [dispatch, email, loggedIn]);
-  
-  return <Box sx={{backgroundColor:"#E64A19", display:"flex", justifyContent:"center", color:"#F9F7F7"}}>{email ? "" : "Not Logged In"}</Box>;
+
+  return (
+    <Box
+      sx={{
+        backgroundColor: "#E64A19",
+        display: "flex",
+        justifyContent: "center",
+        color: "#F9F7F7",
+      }}
+    >
+      {email ? "" : "Not Logged In"}
+    </Box>
+  );
 }
 
 export default Fetch;

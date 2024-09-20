@@ -1,5 +1,4 @@
-import { Box, Button, Card,  IconButton, Modal } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
+import { Box, Button, Card, Modal } from "@mui/material";
 
 
 import PodInfo from "./content/podcast/PodInfo";

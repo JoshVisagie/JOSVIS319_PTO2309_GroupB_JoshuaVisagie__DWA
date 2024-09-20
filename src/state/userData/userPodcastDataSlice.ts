@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, createSelector, PayloadAction } from "@reduxjs/toolkit";
-import { supabase } from "../../supabaseClient"; // Make sure this is configured
+import { supabase } from "../../supabaseClient";
 import { RootState } from "../store";
 
 export interface Liked{

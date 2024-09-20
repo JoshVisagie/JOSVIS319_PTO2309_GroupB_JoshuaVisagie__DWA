@@ -1,9 +1,6 @@
 import { useTheme } from "@mui/material/styles";
 import { Fragment, useRef, useState } from "react";
 import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import AppBar from "@mui/material/AppBar";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -12,8 +9,7 @@ import {
   setTime,
   setDuration,
   setMedia,
-  playPause,
-} from "../../../state/mediaPlayer/mediaSlice"; // Action to set progress time
+} from "../../../state/mediaPlayer/mediaSlice"; 
 import ReactPlayer from "react-player";
 import currentTheme from "../../../style";
 import { useEffect } from "react";
@@ -26,9 +22,6 @@ import {
 import { ListenData } from "../../../state/userData/userPodcastDataSlice";
 
 import CurrentPlayingBadge from "./CurrrentPlayingBadge";
-import userDataSlice from "../../../state/userData/userDataSlice";
-
-import LikeButton from "../../content/buttons/LikeButton";
 
 const checkCurrent = (playerRef, dispatch, listenedState, media) => {
   if (playerRef.current) {
@@ -58,9 +51,7 @@ export default function BottomAppBar() {
   const loggedIn = useAppSelector(state=>state.userData.loggedIn)
   const allPodcasts = useAppSelector((state) => state.podcasts.data);
   const media = useAppSelector((state) => state.media);
-  const userPodcastDataLoaded = useAppSelector(
-    (state) => state.userPodcastData.loading
-  );
+ 
   const listenedState = useAppSelector(
     (state) => state.userPodcastData.userPodcastData?.listen_time
   );
@@ -72,9 +63,7 @@ export default function BottomAppBar() {
     episodeTitle,
     podcastTitle,
     playing,
-    podcastImage,
     id,
-    podcastID,
     timePlaying,
     duration,
   } = media;
@@ -207,6 +196,7 @@ export default function BottomAppBar() {
 
   const handleReady = () => {
     if (!oldMediaHasLoaded && playerRef.current) {
+      //@ts-expect-error this works
       playerRef.current?.seekTo(lastListenState.timePlayed, "seconds");
 
       setOldMediaHasLoaded(true);
