@@ -37,11 +37,9 @@ const sortPods = (data, sortType, allpodcasts) => {
 
 
 const LikedContent = () => {
-  const dispatch = useAppDispatch();
 
   // Fetch the user data from the Redux store
   const likedEpisodes = useAppSelector(selectLikedPodcast);
-  const email = useAppSelector((state) => state.userData.user?.email);
   const allPods = useAppSelector((state) => state.podcasts.data); // All podcasts data
   const [filterType, setFilterType] = useState('revAlphabetic')
   console.log("~ all pods ",allPods)
@@ -86,14 +84,14 @@ const LikedContent = () => {
   console.log("~ sortedPods", sortedPods)
   // Handle podcast card click
   const handleClick = (podcastID: string) => {
-    const likedShows = groupedByPodcast[podcastID]; // Get liked shows for the podcastID
-    setSelectedPodcast({ podcastID, likedShows }); // Set the selected podcast state
+    const likedShows = groupedByPodcast[podcastID]; 
+    setSelectedPodcast({ podcastID, likedShows });
     console.log("handleclick props",podcastID, likedShows)
   };
 
   // Handle closing the modal
   const handleClose = () => {
-    setSelectedPodcast(null); // Reset the selected podcast to close the modal
+    setSelectedPodcast(null); 
   };
 
   const handleChange= (event) =>{
@@ -172,7 +170,7 @@ const LikedContent = () => {
           <Card
             key={podcastID}
             className="podcast-card"
-            onClick={() => handleClick(podcastID)} // Pass podcastID on click
+            onClick={() => handleClick(podcastID)} 
             sx={{
               margin: 3,
               padding: "5px",
