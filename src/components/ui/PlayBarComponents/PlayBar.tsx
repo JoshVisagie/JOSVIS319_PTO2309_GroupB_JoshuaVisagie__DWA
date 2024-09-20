@@ -171,12 +171,15 @@ export default function BottomAppBar() {
           );
 
           if (splitData && lastListenPodID) {
+            //@ts-expect-error expected
             dispatch(fetchIndivdualPodcast(lastListenPodID));
 
             if (individualPodcast) {
+              //@ts-expect-error it works
               const selectedSeason = individualPodcast.seasons[seasonNum - 1];
 
               if (selectedSeason) {
+                //@ts-expect-error it works
                 const selectedEpisode = selectedSeason.episodes[episodeNum - 1];
 
                 const setMediaAction = {
@@ -293,7 +296,7 @@ export default function BottomAppBar() {
               justifyContent: "center",
             }}
           >
-            <LikeButton />
+            
           </Box>
         </Box>
 
