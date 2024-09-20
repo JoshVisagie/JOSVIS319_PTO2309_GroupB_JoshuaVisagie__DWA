@@ -1,13 +1,15 @@
 
 //redux imports
-import { useAppSelector } from "../../reduxHooks";
+import { useAppSelector,useAppDispatch } from "../../reduxHooks";
 //component imports
 import PodcastList from "./podcast/PodcastList";
 import LogInForm from "./user/LogInForm";
 import SearchContent from "./search/SearchContent";
 import LikedContent from "./likedContent/LikedContent";
-
+import { useEffect } from "react";
 import { Box } from "@mui/material";
+
+import { togglePage } from "../../state/display/displaySlice";
 /**
  * A component for handling what will be shown on the page depending on what the state is
  *
@@ -16,6 +18,18 @@ import { Box } from "@mui/material";
  */
 const Content = () => {
   const nav = useAppSelector((state) => state.display.page);
+  const loggedIn = useAppSelector((state=>state.userData))
+  const dispatch = useAppDispatch()
+
+  
+  useEffect(() => {
+  if(!loggedIn.loggedIn){
+    dispatch(togglePage("user"));
+  }else{
+    dispatch(togglePage("home"));
+  }
+  }, [loggedIn.user?.email])
+  
 
   return (
     <div>

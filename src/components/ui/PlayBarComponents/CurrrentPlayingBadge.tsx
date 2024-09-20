@@ -5,6 +5,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import CssBaseline from "@mui/material/CssBaseline";
 import currentTheme from "../../../style";
+import { Box } from "@mui/material";
 
 
  const CurrentPlayingBadge=(props) =>{
@@ -19,7 +20,9 @@ import currentTheme from "../../../style";
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
-            maxWidth: "30%", // Limit the size to 30% of the bottom app bar
+            justifyContent:"space-around",
+            width: "100%", // Limit the size to 30% of the bottom app bar
+            height:40,
             borderRadius: "25px",
             padding: "8px",
             backgroundColor: currentTheme.primary,
@@ -27,30 +30,13 @@ import currentTheme from "../../../style";
             boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.1)",
           }}
         >
-          {episodeTitle && <CardMedia
-            component='img'
-            sx={{ width: 60, height: 60, borderRadius: "12px" }}
-            image={podcastImage || "src/assets/images/SCR-20240918-lwpk.png"}
-            alt='Episode cover'
-          />}
-          <CardContent
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              overflow: "hidden", // Hide overflow content
-              marginLeft: "8px",
-              whiteSpace: "wrap", // Prevent wrapping of text
-              textOverflow: "ellipsis", // Use ellipsis for overflow text
-            }}
-          >
+          
+      
             <Typography
               component='div'
               variant='body1'
               sx={{
-                overflow: "hidden",
                 whiteSpace: "nowrap",
-                textOverflow: "elispsis", // Apply ellipsis
                 animation: !episodeTitle || episodeTitle.length > 20 ? `scroll 10s linear infinite` : "none",
                 "@keyframes scroll": {
                   from: { transform: "translateX(0)" },
@@ -60,6 +46,7 @@ import currentTheme from "../../../style";
             >
               {episodeTitle || "No Episode"}
             </Typography>
+           
             <Typography
               variant='subtitle2'
               component='div'
@@ -72,7 +59,6 @@ import currentTheme from "../../../style";
             >
               {podcastTitle || "No Podcast"}
             </Typography>
-          </CardContent>
         </Card>
 
        

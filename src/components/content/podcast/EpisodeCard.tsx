@@ -4,14 +4,14 @@ import React, { useState, useEffect } from "react";
 import IconButton from "@mui/material/IconButton";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
-
+import { CheckCircleRounded } from "@mui/icons-material";
 import Grid from "@mui/joy/Grid";
 
 import { useAppSelector, useAppDispatch } from "../../../reduxHooks";
 import { playPause, setMedia } from "../../../state/mediaPlayer/mediaSlice";
 
 import LikeButton from "../buttons/LikeButton";
-import { duration } from "@mui/material";
+import { Box, duration } from "@mui/material";
 
 // Props interface for EpisodeCard
 interface EpisodeCardProps {
@@ -49,8 +49,27 @@ const EpisodeCard: React.FC<EpisodeCardProps> = (props) => {
   const dispatch = useAppDispatch();
   const email = useAppSelector((state) => state.userData.user?.email);
   
+  const listenTime = useAppSelector(state=>state.userPodcastData.userPodcastData?.listen_time)
+  const [currentEpisodeListenTime, setCurrentEpisodeListenTime] = useState(0)
+  const [currentEpisodeFin, setCurrentEpisodeListenFin] = useState(false)
+
   const id = `${podcastID}-${season}-${episode.episode}`
   // Handles play and pause functionality
+
+  useEffect(() => {
+   
+    const foundListenPodcast = listenTime?.find(episode=> episode.episodeID == id)
+
+    if(foundListenPodcast){
+      setCurrentEpisodeListenTime(foundListenPodcast.timePlayed)
+      setCurrentEpisodeListenFin(foundListenPodcast.isDone)
+    }else{
+      setCurrentEpisodeListenTime(0)
+    }
+    
+  })
+  
+
   const handlePlayPause = () => {
     if (media.id !== id) {
       console.log(episode.file, id);
@@ -63,9 +82,10 @@ const EpisodeCard: React.FC<EpisodeCardProps> = (props) => {
         podcastImage: podcastImage,
     
       };
-
+      dispatch(playPause(false));
       dispatch(setMedia(newMedia));
-      dispatch(playPause(!isMediaPlaying));
+      dispatch(playPause(true));
+
     } else {
       dispatch(playPause(!isMediaPlaying));
     }
@@ -92,6 +112,9 @@ const EpisodeCard: React.FC<EpisodeCardProps> = (props) => {
       </Grid>
 
       <Grid>
+        <Box>
+          {currentEpisodeFin?<CheckCircleRounded/> : <h6>listened to: {currentEpisodeListenTime} Seconds</h6>}
+        </Box>
         <audio ref={audioRef} src={episode.file} />
         {/* Play/Pause Button */}
         <IconButton onClick={handlePlayPause}>

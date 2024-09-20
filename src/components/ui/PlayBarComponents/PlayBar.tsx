@@ -12,6 +12,7 @@ import {
   setTime,
   setDuration,
   setMedia,
+  playPause,
 } from "../../../state/mediaPlayer/mediaSlice"; // Action to set progress time
 import ReactPlayer from "react-player";
 import currentTheme from "../../../style";
@@ -27,8 +28,28 @@ import { ListenData } from "../../../state/userData/userPodcastDataSlice";
 import CurrentPlayingBadge from "./CurrrentPlayingBadge";
 import userDataSlice from "../../../state/userData/userDataSlice";
 
+import LikeButton from "../../content/buttons/LikeButton";
+
+const checkCurrent = (playerRef, dispatch, listenedState, media) => {
+  if (playerRef.current) {
+    dispatch(setDuration(playerRef.current.getDuration()));
+
+    if (listenedState) {
+      const potentialData = listenedState.find((episode) => {
+        return episode.episodeID === media.id;
+      });
+
+      if (potentialData) {
+        playerRef.current.seekTo(potentialData.timePlayed, "seconds");
+      } else {
+        playerRef.current.seekTo(0, "seconds");
+      }
+    }
+  }
+};
 export default function BottomAppBar() {
   const playerRef = useRef<ReactPlayer | null>(null);
+
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const individualPodcast = useAppSelector(
@@ -36,14 +57,15 @@ export default function BottomAppBar() {
   );
   const allPodcasts = useAppSelector((state) => state.podcasts.data);
   const media = useAppSelector((state) => state.media);
-  const userPodcastDataLoaded= useAppSelector((state) => state.userPodcastData.loading)
+  const userPodcastDataLoaded = useAppSelector(
+    (state) => state.userPodcastData.loading
+  );
   const listenedState = useAppSelector(
     (state) => state.userPodcastData.userPodcastData?.listen_time
   );
   const lastListenState = useAppSelector(
     (state) => state.userPodcastData.userPodcastData?.last_listen
   );
-  console.log("🚀 ~ BottomAppBar ~ listenedState:", listenedState);
   const {
     url,
     episodeTitle,
@@ -57,6 +79,7 @@ export default function BottomAppBar() {
   } = media;
   const email = useAppSelector((state) => state.userData.user?.email);
   const [isDone, setIsDone] = useState(false);
+  const [oldMediaHasLoaded, setOldMediaHasLoaded] = useState(false);
 
   /**
    * this function handles all pushing the media metadata to Database
@@ -122,87 +145,69 @@ export default function BottomAppBar() {
   }, []);
 
   const handlePlay = () => {
-    if (playerRef.current) {
-      dispatch(setDuration(playerRef.current.getDuration()));
-
-      if (listenedState) {
-        const potentialData = listenedState.find((episode) => {
-          console.log("🚀 ~ potentialData ~ episode.episodeID === media.id:", episode.episodeID === media.id)
-          return episode.episodeID === media.id;
-        });
-
-        if (potentialData) {
-          playerRef.current.seekTo(potentialData.timePlayed, "seconds");
-        } else {
-          playerRef.current.seekTo(0, "seconds");
-        }
-      }
-    }
-
     console.log("started");
   };
 
   useEffect(() => {
-   
-  }, [media.id])
-  
+    checkCurrent(playerRef, dispatch, listenedState, media);
+  }, [media.playing, media.id]);
+
   const handleEnd = () => {
     setIsDone(true);
   };
 
   useEffect(() => {
-   
-   
-    if (!media.id){
-    const episodeID = lastListenState?.episodeID
-    if(episodeID){
+    const LoadPrevMedia = () => {
+      if (!media.id) {
+        const episodeID = lastListenState?.episodeID;
+        if (episodeID) {
+          const splitData = episodeID.split("-");
+          const lastListenPodID = splitData?.at(0);
+          const seasonNum = splitData?.at(1);
+          const episodeNum = splitData?.at(2);
+          const selectedPod = allPodcasts.find(
+            (podcast) => podcast.id == lastListenPodID
+          );
 
-    const splitData = episodeID.split("-");
-    console.log("🚀 ~ useEffect ~ split:", splitData)
+          if (splitData && lastListenPodID) {
+            dispatch(fetchIndivdualPodcast(lastListenPodID));
 
-    const lastListenPodID = splitData?.at(0);
-    console.log("🚀 ~ useEffect ~ lastListenPodID:", lastListenPodID)
-    
-    const seasonNum = splitData?.at(1);
-    console.log("🚀 ~ useEffect ~ seasonNum:", seasonNum)
+            if (individualPodcast) {
+              const selectedSeason = individualPodcast.seasons[seasonNum - 1];
 
-    const episodeNum= splitData?.at(2);
-    console.log("🚀 ~ useEffect ~ episodeNum:", episodeNum)
+              if (selectedSeason) {
+                const selectedEpisode = selectedSeason.episodes[episodeNum - 1];
 
-    const selectedPod = allPodcasts.find(podcast=> podcast.id ==lastListenPodID)
-    console.log("🚀 ~ useEffect ~ selectedPod:", selectedPod)
+                const setMediaAction = {
+                  id: lastListenState.episodeID,
+                  url: selectedEpisode.file,
+                  episodeTitle: selectedEpisode.title,
+                  podcastTitle: selectedPod?.title,
+                  podcastID: lastListenPodID,
+                  podcastImage: selectedPod?.image,
+                };
 
-    if (splitData && lastListenPodID) {
-      dispatch(fetchIndivdualPodcast(lastListenPodID));
-      
-      if (individualPodcast) {
-        const selectedSeason = individualPodcast.seasons[seasonNum - 1];
-        console.log("🚀 ~ useEffect ~ selectedSeason:", selectedSeason)
-        
-        if (selectedSeason) {
-          const selectedEpisode = selectedSeason.episodes[episodeNum - 1];
-          console.log("🚀 ~ useEffect ~ selectedEpisode:", selectedEpisode)
-
-         const setMediaAction = {
-            id:lastListenState.episodeID,
-            url: selectedEpisode.file,
-            episodeTitle: selectedEpisode.title,
-            podcastTitle: selectedPod?.title,
-            podcastID: lastListenPodID,
-            podcastImage: selectedPod?.image,
-           
-        }
-         console.log("🚀 ~ useEffect ~ setMediaAction:", setMediaAction)
-       
-        dispatch(setMedia(setMediaAction))
-
+                dispatch(setMedia(setMediaAction));
+                console.log(
+                  "🚀 ~ LoadPrevMedia ~ media:",
+                  lastListenState.timePlayed
+                );
+              }
+            }
+          }
         }
       }
-    }}
-      console.log("🚀 ~ useEffect ~ media:", media)}
+    };
+    LoadPrevMedia();
   });
-    console.log("🚀 ~ AfteruseEffect ~ lastListenState:", lastListenState)
 
+  const handleReady = () => {
+    if (!oldMediaHasLoaded && playerRef.current) {
+      playerRef.current?.seekTo(lastListenState.timePlayed, "seconds");
+
+      setOldMediaHasLoaded(true);
+    }
+  };
   return (
     <Fragment>
       <CssBaseline />
@@ -210,42 +215,78 @@ export default function BottomAppBar() {
         position='fixed'
         color='primary'
         sx={{
-          backgroundColor: "rgba(0,0,0,0)",
+          background:
+            "linear-gradient(to top, rgba(231, 241, 255, 1) 0%,rgba(255,255,255,0) 100%)",
+          backdropFilter: "blur(1px)",
           top: "auto",
           bottom: 0,
           display: "flex",
-          flexDirection: "row",
+          flexDirection: "column",
           alignItems: "center",
           boxShadow: 0,
           justifyContent: "space-between",
           padding: "10px", // Add some padding around the components
         }}
       >
-        {/* Card with Episode Information */}
+        <Box sx={{ width: "100%", display: "flex", flexDirection: "row" }}>
+          {/* React Player */}
+          <Box
+            sx={{
+              backgroundColor: currentTheme.primary,
+              width: "60px",
+              borderRadius: "50%",
+              overflow: "hidden",
+            }}
+          >
+            {media.podcastImage && (
+              <img
+                src={media.podcastImage}
+                style={{
+                  objectFit: "contain", 
+                  width: "100%", 
+                  height: "100%", 
+                }}
+                alt='Podcast'
+              />
+            )}
+          </Box>
+          {url ? (
+            <ReactPlayer
+              ref={playerRef}
+              url={url}
+              playing={playing}
+              controls={true} // Show the default ReactPlayer controls
+              onProgress={handleProgress}
+              onPlay={handlePlay}
+              onEnded={handleEnd}
+              height='60px'
+              width='65%' // Adjust the player width
+              style={{ flexGrow: 1 }}
+              onReady={handleReady}
+            />
+          ) : (
+            <Typography variant='h6' sx={{ color:currentTheme.primary,padding: 2, width:'65%' }}>
+              No episode selected
+            </Typography>
+          )}
+          <Box
+            sx={{
+              backgroundColor: currentTheme.primary,
+              width: "60px",
+              borderRadius: "50%",
+              display: "flex",
+              alignContent:"center",
+              justifyContent:"center"
+            }}
+          >
+            <LikeButton/>
+          </Box>
+        </Box>
+
         <CurrentPlayingBadge
           episodeTitle={episodeTitle}
-          podcastImage={podcastImage}
           podcastTitle={podcastTitle}
         />
-        {/* React Player */}
-        {url ? (
-          <ReactPlayer
-            ref={playerRef}
-            url={url}
-            playing={playing}
-            controls={true} // Show the default ReactPlayer controls
-            onProgress={handleProgress}
-            onPlay={handlePlay}
-            onEnded={handleEnd}
-            height='60px'
-            width='65%' // Adjust the player width
-            style={{ marginLeft: "10px", flexGrow: 1 }}
-          />
-        ) : (
-          <Typography variant='body1' sx={{ padding: 2 }}>
-            No episode selected
-          </Typography>
-        )}
       </AppBar>
     </Fragment>
   );
