@@ -25,6 +25,7 @@ export default function GenreBar() {
       sx={{
         display: "flex",
         justifyContent: "space-evenly",
+        flexWrap:"wrap",
         padding: 2,
         gap: 2,
       }}
