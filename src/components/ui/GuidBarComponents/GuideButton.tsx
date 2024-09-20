@@ -66,7 +66,6 @@ const GuideButton = ({
         margin: buttonValue === currentPage ? "7px" : "5px",
         boxShadow: buttonValue === currentPage ? 2 : 1,
         transition: "all 0.3s ease",
-
         "&:hover": {
           backgroundColor: primaryColor,
           color: secondaryColor,

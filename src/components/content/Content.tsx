@@ -21,7 +21,7 @@ const Content = () => {
   const loggedIn = useAppSelector((state=>state.userData))
   const dispatch = useAppDispatch()
 
-  
+
   useEffect(() => {
   if(!loggedIn.loggedIn){
     dispatch(togglePage("user"));
@@ -37,7 +37,7 @@ const Content = () => {
       {nav == "home" && <PodcastList />}
       {nav == "search" && <SearchContent />}
       {nav== "liked" &&<LikedContent/>}
-      <Box sx={{marginTop:"100px"}} ></Box>
+      <Box sx={{marginTop:"130px"}} ></Box>
     </div>
   );
 };

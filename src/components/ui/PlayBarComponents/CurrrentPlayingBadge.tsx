@@ -9,7 +9,10 @@ import { Box } from "@mui/material";
 
 
  const CurrentPlayingBadge=(props) =>{
+  
  const {episodeTitle, podcastImage, podcastTitle } =props
+
+ 
   return (
     <Fragment>
       <CssBaseline />

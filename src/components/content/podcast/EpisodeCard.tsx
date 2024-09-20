@@ -48,7 +48,8 @@ const EpisodeCard: React.FC<EpisodeCardProps> = (props) => {
   const isMediaPlaying = useAppSelector((state) => state.media.playing);
   const dispatch = useAppDispatch();
   const email = useAppSelector((state) => state.userData.user?.email);
-  
+  const loggedIn = useAppSelector(state=>state.userData.loggedIn)
+
   const listenTime = useAppSelector(state=>state.userPodcastData.userPodcastData?.listen_time)
   const [currentEpisodeListenTime, setCurrentEpisodeListenTime] = useState(0)
   const [currentEpisodeFin, setCurrentEpisodeListenFin] = useState(false)
@@ -111,11 +112,11 @@ const EpisodeCard: React.FC<EpisodeCardProps> = (props) => {
         </h4>
       </Grid>
 
-      <Grid>
+     {loggedIn && <Grid>
         <Box>
           {currentEpisodeFin?<CheckCircleRounded/> : <h6>listened to: {currentEpisodeListenTime} Seconds</h6>}
         </Box>
-        <audio ref={audioRef} src={episode.file} />
+       <audio ref={audioRef} src={episode.file} />
         {/* Play/Pause Button */}
         <IconButton onClick={handlePlayPause}>
           {isMediaPlaying && media.id === id ? (
@@ -133,7 +134,7 @@ const EpisodeCard: React.FC<EpisodeCardProps> = (props) => {
            episode= {episode.episode}
            timestamp= {new Date().getTime()}
         />
-      </Grid>
+      </Grid>}
     </Grid>
   );
 };

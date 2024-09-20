@@ -55,6 +55,7 @@ export default function BottomAppBar() {
   const individualPodcast = useAppSelector(
     (state) => state.individualPodcast.data
   );
+  const loggedIn = useAppSelector(state=>state.userData.loggedIn)
   const allPodcasts = useAppSelector((state) => state.podcasts.data);
   const media = useAppSelector((state) => state.media);
   const userPodcastDataLoaded = useAppSelector(
@@ -158,7 +159,7 @@ export default function BottomAppBar() {
 
   useEffect(() => {
     const LoadPrevMedia = () => {
-      if (!media.id && allPodcasts ) {
+      if (!media.id && allPodcasts) {
         const episodeID = lastListenState?.episodeID;
         if (episodeID) {
           const splitData = episodeID.split("-");
@@ -208,10 +209,20 @@ export default function BottomAppBar() {
       setOldMediaHasLoaded(true);
     }
   };
+
+  const [width, setWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+
   return (
     <Fragment>
       <CssBaseline />
-      <AppBar
+  {  loggedIn &&  <AppBar
         position='fixed'
         color='primary'
         sx={{
@@ -230,7 +241,7 @@ export default function BottomAppBar() {
       >
         <Box sx={{ width: "100%", display: "flex", flexDirection: "row" }}>
           {/* React Player */}
-          <Box
+{    width > 500 &&      <Box
             sx={{
               backgroundColor: currentTheme.primary,
               width: "60px",
@@ -242,14 +253,14 @@ export default function BottomAppBar() {
               <img
                 src={media.podcastImage}
                 style={{
-                  objectFit: "contain", 
-                  width: "100%", 
-                  height: "100%", 
+                  objectFit: "contain",
+                  width: "100%",
+                  height: "100%",
                 }}
                 alt='Podcast'
               />
             )}
-          </Box>
+          </Box>}
           {url ? (
             <ReactPlayer
               ref={playerRef}
@@ -265,7 +276,10 @@ export default function BottomAppBar() {
               onReady={handleReady}
             />
           ) : (
-            <Typography variant='h6' sx={{ color:currentTheme.primary,padding: 2, width:'65%' }}>
+            <Typography
+              variant='h6'
+              sx={{ color: currentTheme.primary, padding: 2, width: "65%" }}
+            >
               No episode selected
             </Typography>
           )}
@@ -275,11 +289,11 @@ export default function BottomAppBar() {
               width: "60px",
               borderRadius: "50%",
               display: "flex",
-              alignContent:"center",
-              justifyContent:"center"
+              alignContent: "center",
+              justifyContent: "center",
             }}
           >
-            <LikeButton/>
+            <LikeButton />
           </Box>
         </Box>
 
@@ -287,7 +301,7 @@ export default function BottomAppBar() {
           episodeTitle={episodeTitle}
           podcastTitle={podcastTitle}
         />
-      </AppBar>
+      </AppBar>}
     </Fragment>
   );
 }
